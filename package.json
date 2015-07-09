@@ -1,6 +1,6 @@
 {
-  "name": "10bis-remainings",
-  "version": "0.0.0",
+  "name": "10bis-calc",
+  "version": "1.0.0",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",

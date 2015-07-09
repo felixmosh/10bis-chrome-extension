@@ -1,25 +1,38 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <!-- build:css styles/vendor.css -->
-    <!-- bower:css -->
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css styles/main.css -->
-    <link href="styles/main.css" rel="stylesheet">
-    <!-- endbuild -->
-  </head>
-  <body>
-    <h1>'Allo, 'Allo!</h1>
+<head>
+	<meta charset="utf-8">
+	<!-- build:css styles/vendor.css -->
+	<!-- bower:css -->
+	<!-- endbower -->
+	<!-- endbuild -->
+	<!-- build:css styles/main.css -->
+	<link href="styles/main.css" rel="stylesheet">
+	<!-- endbuild -->
+</head>
+<body ng-app="10BisApp">
+	<section ng-controller="mainCtrl as vm">
+		<ul ng-if="vm.userLoggedIn()">
+			<li>Logged in as {{vm.data.user.firstName}} {{vm.data.user.lastName}}</li>
+			<li>Monthly usage: {{vm.data.monthlyUsed | currency}} / {{vm.data.coveredByCompany | currency}}
+				({{vm.data.onMe | currency}})
+			</li>
+			<li>Remaining For Today: {{vm.data.remainingForToday | currency}}</li>
+			<li>Avg till the end of the month: {{vm.data.avgTillEndOfTheMonth | currency}} / {{vm.data.dailyCompanyLimit | currency}}</li>
+		</ul>
+		<h1 class="login-message" ng-if="!vm.userLoggedIn()">
+			Please login to <a href="http://www.10bis.co.il/" target="_blank">10Bis</a>.
+		</h1>
+	</section>
+	<!-- build:js scripts/vendor.js -->
+	<!-- bower:js -->
+	<script src="bower_components/angularjs/angular.js"></script>
+	<script src="bower_components/angular-i18n/angular-locale_he-il.js"></script>
+	<!-- endbower -->
+	<!-- endbuild -->
 
-    <!-- build:js scripts/vendor.js -->
-    <!-- bower:js -->
-    <!-- endbower -->
-    <!-- endbuild -->
-
-    <!-- build:js scripts/popup.js -->
-    <script src="scripts/popup.js"></script>
-    <!-- endbuild -->
-  </body>
+	<!-- build:js scripts/popup.js -->
+	<script src="scripts/popup.js"></script>
+	<!-- endbuild -->
+</body>
 </html>
