@@ -50,7 +50,7 @@
 			}
 			data.coveredByCompany = data.dailyCompanyLimit * this.workingDaysTillToday;
 			data.onMe = Math.max(0, data.monthlyUsed - data.coveredByCompany);
-			data.remainingForToday = data.onMe > 0 ? 0 : Math.min(data.monthlyUsed - data.coveredByCompany, 100);
+			data.remainingForToday = data.onMe > 0 ? ((hasTransactionToday) ? 0 : data.dailyCompanyLimit) : Math.min(data.monthlyUsed - data.coveredByCompany, 100);
 			var totalCoveredByCompany = this.monthlyWorkingDays * data.dailyCompanyLimit;
 			data.avgTillEndOfTheMonth = (totalCoveredByCompany - data.monthlyUsed) / (this.monthlyWorkingDays - this.workingDaysTillToday);
 
