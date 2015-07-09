@@ -15,9 +15,8 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0;
   font-size: 17px;
   color: #ffffff; }
-
-h4, h5, h6 {
-  color: #000000; }
+  .gray h1, .gray h2, .gray h3, .gray h4, .gray h5, .gray h6 {
+    color: #000000; }
 
 a {
   outline: none; }
@@ -34,16 +33,18 @@ a {
   background-color: #43b800; }
 
 .red {
-  background-color: #ea2300; }
+  background-color: #ef0000; }
+
+.gray {
+  background-color: #e0e0e0; }
 
 header {
-  background-color: #ef0000;
   width: 325px;
   border-radius: 7px;
   padding: 5px 10px;
   margin-bottom: 9px;
   position: relative;
-  padding-right: 40px; }
+  padding-right: 35px; }
   header svg {
     position: absolute;
     top: -8px;
@@ -61,13 +62,15 @@ section {
   vertical-align: top;
   margin: 0;
   height: 91px;
-  padding: 6px 10px 10px 10px;
+  padding: 5px 10px 10px 10px;
   text-align: center;
   overflow: hidden; }
   .half-block:first-child {
     margin-left: 9px; }
   .half-block h4 {
-    font-size: 30px; }
+    font-size: 30px;
+    line-height: 40px;
+    margin-bottom: 2px; }
   .half-block h5 {
     position: relative;
     bottom: -20px;
@@ -80,7 +83,6 @@ section {
   clear: both; }
 
 .full-block {
-  background-color: #e0e0e0;
   border-radius: 7px;
   width: 100%;
   margin-top: 9px;

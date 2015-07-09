@@ -18,10 +18,10 @@ h1, h2, h3, h4, h5, h6 {
 	padding: 0;
 	font-size: 17px;
 	color: #ffffff;
-}
 
-h4, h5, h6 {
-	color: #000000;
+	.gray & {
+		color: #000000;
+	}
 }
 
 a {
@@ -46,17 +46,20 @@ a {
 }
 
 .red {
-	background-color:rgb(234,35,0);
+	background-color:rgb(239,0,0);
+}
+
+.gray {
+	background-color:rgb(224,224,224);
 }
 
 header {
-	background-color:rgb(239,0,0);
 	width:325px;
 	border-radius:7px;
 	padding: 5px 10px;
 	margin-bottom: 9px;
 	position: relative;
-	padding-right: 40px;
+	padding-right: 35px;
 
 	svg {
 		position: absolute;
@@ -79,7 +82,7 @@ section {
 	vertical-align: top;
 	margin: 0;
 	height:91px;
-	padding: 6px 10px 10px 10px;
+	padding: 5px 10px 10px 10px;
 	text-align: center;
 	overflow: hidden;
 
@@ -89,6 +92,8 @@ section {
 
 	h4 {
 		font-size: 30px;
+		line-height: 40px;
+		margin-bottom: 2px;
 	}
 
 	h5 {
@@ -110,7 +115,6 @@ section {
 }
 
 .full-block {
-	background-color:rgb(224,224,224);
 	border-radius:7px;
 	width: 100%;
 	margin-top: 9px;
