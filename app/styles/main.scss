@@ -2,7 +2,7 @@
 
 body {
 	width: 325px;
-	height: 235px;
+	height: 231px;
 	direction: rtl;
 	font-size: 16px;
 	font-family: 'Open Sans Hebrew', sans-serif;
@@ -54,7 +54,7 @@ header {
 	width:325px;
 	border-radius:7px;
 	padding: 5px 10px;
-	margin-bottom: 11px;
+	margin-bottom: 9px;
 	position: relative;
 	padding-right: 40px;
 
@@ -74,7 +74,7 @@ section {
 
 .half-block {
 	border-radius:7px;
-	width: 157px;
+	width: 158px;
 	float: right;
 	vertical-align: top;
 	margin: 0;
@@ -84,7 +84,7 @@ section {
 	overflow: hidden;
 
 	&:first-child {
-		margin-left: 11px;
+		margin-left: 9px;
 	}
 
 	h4 {
@@ -113,7 +113,7 @@ section {
 	background-color:rgb(224,224,224);
 	border-radius:7px;
 	width: 100%;
-	margin-top: 11px;
+	margin-top: 9px;
 	padding: 10px 13px;
 
 	h3 {

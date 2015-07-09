@@ -1,7 +1,7 @@
 @import url(http://fonts.googleapis.com/earlyaccess/opensanshebrew.css);
 body {
   width: 325px;
-  height: 235px;
+  height: 231px;
   direction: rtl;
   font-size: 16px;
   font-family: 'Open Sans Hebrew', sans-serif; }
@@ -41,7 +41,7 @@ header {
   width: 325px;
   border-radius: 7px;
   padding: 5px 10px;
-  margin-bottom: 11px;
+  margin-bottom: 9px;
   position: relative;
   padding-right: 40px; }
   header svg {
@@ -56,7 +56,7 @@ section {
 
 .half-block {
   border-radius: 7px;
-  width: 157px;
+  width: 158px;
   float: right;
   vertical-align: top;
   margin: 0;
@@ -65,7 +65,7 @@ section {
   text-align: center;
   overflow: hidden; }
   .half-block:first-child {
-    margin-left: 11px; }
+    margin-left: 9px; }
   .half-block h4 {
     font-size: 30px; }
   .half-block h5 {
@@ -83,7 +83,7 @@ section {
   background-color: #e0e0e0;
   border-radius: 7px;
   width: 100%;
-  margin-top: 11px;
+  margin-top: 9px;
   padding: 10px 13px; }
   .full-block h3 {
     color: #000000; }
