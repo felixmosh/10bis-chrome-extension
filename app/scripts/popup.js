@@ -1,12 +1,14 @@
 'use strict';
 
 (function () {
-	var baseUrl = 'https://www.10bis.co.il';
-	var app = angular.module('10BisApp', []);
+	var baseUrl = 'http://www.10bis.co.il';
+	var app = angular.module('10BisApp', ['highcharts-ng']);
 
-	app.controller('mainCtrl', ['dataService', 'calculatorService', function (dataService, calculatorService) {
+	app.controller('mainCtrl', ['dataService', 'calculatorService', 'chartsService', function (dataService, calculatorService, chartsService) {
 		var _this = this;
 		this.data = {};
+
+		this.isLoaded = false;
 
 		dataService.loadData().then(function (data) {
 			angular.extend(_this.data, data);
@@ -14,6 +16,9 @@
 			dataService.loadExpenses().then(function (data) {
 				var calculatedData = calculatorService.calculate(data);
 				angular.extend(_this.data, calculatedData);
+				_this.isLoaded = true;
+				_this.monthlyChartConfig = chartsService.prepareMonthlyChart(_this.data);
+				_this.totalsChartConfig = chartsService.prepareTotalsChart(_this.data);
 			});
 		});
 
@@ -22,17 +27,167 @@
 		};
 	}]);
 
+	app.service('chartsService', [function () {
+		var _this = this;
+
+		this.monthlyChartConfig = {
+			options: {
+				chart: {
+					type: 'line'
+				},
+				tooltip: {
+					xDateFormat: '%A, %d/%m',
+					valueDecimals: 2,
+					valueSuffix: ' ₪'
+				},
+				legend: {
+					enabled: false
+				}
+			},
+			series: [{
+				name: 'Expense',
+				data: []
+			}],
+			xAxis: {
+				type: 'datetime',
+				dateTimeLabelFormats: {
+					day: '%d/%m'
+				}
+			},
+			yAxis: {
+				plotLines: [{
+					color: 'gray',
+					width: 1,
+					value: 0,
+					dashStyle: 'longdashdot'
+				}],
+				title: {
+					margin: 0,
+					text: ''
+				}
+			},
+			title: {
+				margin: 0,
+				text: ''
+			},
+			loading: false,
+			credits: {
+				enabled: false
+			}
+		};
+
+		this.totalsChartConfig = {
+			options: {
+				chart: {type: 'bar'},
+				plotOptions: {series: {stacking: 'normal'}},
+				legend: {
+					enabled: false
+				},
+				tooltip: {
+					valueDecimals: 2,
+					valueSuffix: ' ₪'
+				}
+			},
+			series: [],
+			yAxis: {
+				title: {
+					margin: 0,
+					text: ''
+				},
+				reversedStacks: false
+			},
+			title: {text: '', margin: 0},
+			credits: {enabled: false},
+			loading: false
+		};
+
+		this.prepareMonthlyChart = function (data) {
+			data.transactions.forEach(function (transaction) {
+				_this.monthlyChartConfig.series[0].data.push([transaction.date.getTime(), transaction.amount]);
+			});
+			this.monthlyChartConfig.yAxis.plotLines[0].value = data.dailyCompanyLimit;
+			return this.monthlyChartConfig;
+		};
+
+		this.prepareTotalsChart = function (data) {
+			if(data.monthlyUsed > data.totalCoveredByCompany) {
+				this.totalsChartConfig.series.push({
+					data: [data.totalCoveredByCompany],
+					name: 'Covered by company',
+					color: 'green'
+				});
+
+				this.totalsChartConfig.series.push({
+					data: [data.monthlyUsed - data.totalCoveredByCompany],
+					name: 'Exceed',
+					color: 'red'
+				});
+
+				this.totalsChartConfig.yAxis.max = data.monthlyUsed;
+			}
+			else {
+				if(data.monthlyUsed > data.coveredByCompany) {
+					this.totalsChartConfig.series.push({
+						data: [data.coveredByCompany],
+						name: 'Covered by company',
+						color: 'green'
+					});
+
+					this.totalsChartConfig.series.push({
+						data: [data.monthlyUsed - data.coveredByCompany],
+						name: 'Exceed',
+						color: 'red'
+					});
+
+					this.totalsChartConfig.series.push({
+						data: [data.totalCoveredByCompany - data.monthlyUsed],
+						name: 'Monthly remaining',
+						color: 'lightgray'
+					});
+				}
+				else {
+					this.totalsChartConfig.series.push({
+						data: [data.monthlyUsed],
+						name: 'Monthly used',
+						color: 'lightgreen'
+					});
+
+					this.totalsChartConfig.series.push({
+						data: [data.coveredByCompany - data.monthlyUsed],
+						name: 'Daily remaining',
+						color: 'green'
+					});
+
+					this.totalsChartConfig.series.push({
+						data: [data.totalCoveredByCompany - data.coveredByCompany],
+						name: 'Monthly remaining',
+						color: 'lightgray'
+					});
+				}
+
+				this.totalsChartConfig.yAxis.max = data.totalCoveredByCompany;
+			}
+
+
+			return this.totalsChartConfig;
+		};
+	}]);
+
 	app.service('calculatorService', [function () {
 		this.workingDaysTillToday = 0;
 		this.monthlyWorkingDays = 0;
+		var today = new Date();
+
+		var isWorkingDay = function (date) {
+			return parseInt(date.getDay() / 5) === 0;
+		};
 
 		this.updateWorkingDays = function () {
-			var today = new Date();
 			var currentMonth = today.getMonth();
 			var currentDay = new Date(today.getFullYear(), currentMonth, 1);
 
 			while (currentDay.getMonth() === currentMonth) {
-				if (parseInt(currentDay.getDay() / 5) === 0) {
+				if (isWorkingDay(currentDay)) {
 					this.monthlyWorkingDays++;
 
 					if (currentDay.getDate() < today.getDate()) {
@@ -44,23 +199,30 @@
 		};
 
 		this.calculate = function (data) {
-			var hasTransactionToday = this.hasTransactionToday(data.transactions);
-			if (!hasTransactionToday) {
+			var wasTransactionToday = this.wasTransactionToday(data.transactions);
+			if (!wasTransactionToday) {
 				this.workingDaysTillToday--;
 			}
 			data.coveredByCompany = data.dailyCompanyLimit * this.workingDaysTillToday;
+			data.totalCoveredByCompany = this.monthlyWorkingDays * data.dailyCompanyLimit;
 			data.onMe = Math.max(0, data.monthlyUsed - data.coveredByCompany);
-			data.remainingForToday = data.onMe > 0 ? ((hasTransactionToday) ? 0 : data.dailyCompanyLimit) : Math.min(data.monthlyUsed - data.coveredByCompany, 100);
-			var totalCoveredByCompany = this.monthlyWorkingDays * data.dailyCompanyLimit;
-			data.avgTillEndOfTheMonth = (totalCoveredByCompany - data.monthlyUsed) / (this.monthlyWorkingDays - this.workingDaysTillToday);
+
+			if (data.onMe > 0) {
+				data.remainingForToday = ((wasTransactionToday || !isWorkingDay(today)) ? 0 : data.dailyCompanyLimit);
+			}
+			else {
+				data.remainingForToday = Math.min(data.coveredByCompany - data.monthlyUsed, 100);
+			}
+
+			data.avgTillEndOfTheMonth = (data.totalCoveredByCompany - data.monthlyUsed) / (this.monthlyWorkingDays - this.workingDaysTillToday);
 
 			return data;
 		};
 
-		this.hasTransactionToday = function (transactions) {
-			var today = new Date().getDate();
+		this.wasTransactionToday = function (transactions) {
+			var today = new Date();
 			return transactions.filter(function (transaction) {
-					return transaction.date.getDate() === today;
+					return transaction.date.getDate() === today.getDate();
 				}).length > 0;
 		};
 

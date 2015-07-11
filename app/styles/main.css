@@ -1,7 +1,6 @@
 @import url(http://fonts.googleapis.com/earlyaccess/opensanshebrew.css);
 body {
   width: 325px;
-  height: 231px;
   direction: rtl;
   font-size: 16px;
   font-family: 'Open Sans Hebrew', sans-serif; }
@@ -33,7 +32,7 @@ a {
   background-color: #43b800; }
 
 .red {
-  background-color: #ef0000; }
+  background-color: #c70000; }
 
 .gray {
   background-color: #e0e0e0; }
@@ -89,5 +88,11 @@ section {
   padding: 10px 13px; }
   .full-block h3 {
     color: #000000; }
+
+.chart {
+  direction: ltr;
+  max-height: 200px; }
+  .chart.stacked {
+    height: 100px; }
 
 /*# sourceMappingURL=main.css.map */

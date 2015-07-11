@@ -2,7 +2,10 @@
   "name": "10bis-calc",
   "version": "1.0.0",
   "dependencies": {
-    "angularjs": "~1.4.1"
+    "angularjs": "~1.4.1",
+    "jquery": "~2.1.4",
+    "highcharts": "~4.1.7",
+    "highcharts-ng": "~0.0.8"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.1"

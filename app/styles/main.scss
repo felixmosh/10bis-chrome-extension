@@ -2,7 +2,6 @@
 
 body {
 	width: 325px;
-	height: 231px;
 	direction: rtl;
 	font-size: 16px;
 	font-family: 'Open Sans Hebrew', sans-serif;
@@ -46,7 +45,7 @@ a {
 }
 
 .red {
-	background-color:rgb(239,0,0);
+	background-color: rgb(199, 0, 0);
 }
 
 .gray {
@@ -122,5 +121,14 @@ section {
 
 	h3 {
 		color: #000000;
+	}
+}
+
+.chart {
+	direction: ltr;
+	max-height: 200px;
+
+	&.stacked {
+		height: 100px;
 	}
 }

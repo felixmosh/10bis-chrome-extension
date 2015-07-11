@@ -21,7 +21,8 @@
 					{{vm.data.user.firstName}} {{vm.data.user.lastName}}</h1>
 			</header>
 			<main>
-				<div class="half-block green">
+				<div class="half-block"
+					 ng-class="{'green': vm.data.remainingForToday >= vm.data.dailyCompanyLimit, 'gray': vm.data.remainingForToday < vm.data.dailyCompanyLimit}">
 					<h3>
 						יתרתך להיום:
 					</h3>
@@ -30,7 +31,8 @@
 						הגבלה יומית:
 						{{vm.data.dailyCompanyLimit | currency}}</h5>
 				</div>
-				<div class="half-block gray">
+				<div class="half-block"
+					 ng-class="{'green': vm.data.avgTillEndOfTheMonth >= vm.data.dailyCompanyLimit, 'red': vm.data.avgTillEndOfTheMonth < vm.data.dailyCompanyLimit}">
 					<h3>
 						סבסוד יומי:
 					</h3>
@@ -40,20 +42,8 @@
 					</h5>
 				</div>
 				<div class="clear"></div>
-				<div class="full-block gray">
-					<h3>
-						סכום השימוש עד כה:
-						{{vm.data.monthlyUsed | currency}}
-					</h3>
-					<h3>
-						סכום הסבסוד עד כה:
-						{{vm.data.coveredByCompany | currency}}
-					</h3>
-					<h3>
-						יתרה לחיוב בתלוש שכר:
-						{{vm.data.onMe | currency}}
-					</h3>
-				</div>
+				<highchart class="chart stacked" config="vm.totalsChartConfig"></highchart>
+				<highchart class="chart" config="vm.monthlyChartConfig"></highchart>
 			</main>
 		</div>
 
@@ -68,7 +58,11 @@
 
 	<!-- build:js scripts/vendor.js -->
 	<!-- bower:js -->
+	<script src="bower_components/jquery/dist/jquery.js"></script>
 	<script src="bower_components/angularjs/angular.js"></script>
+	<script src="bower_components/angular-i18n/angular-locale_he-il.js"></script>
+	<script src="bower_components/highcharts/highcharts.js"></script>
+	<script src="bower_components/highcharts-ng/dist/highcharts-ng.js"></script>
 	<!-- endbower -->
 	<!-- endbuild -->
 
