@@ -1,13 +1,12 @@
 'use strict';
 
 (function () {
-	var baseUrl = 'http://www.10bis.co.il';
+	var baseUrl = 'https://www.10bis.co.il';
 	var app = angular.module('10BisApp', ['highcharts-ng']);
 
 	app.controller('mainCtrl', ['dataService', 'calculatorService', 'chartsService', function (dataService, calculatorService, chartsService) {
 		var _this = this;
 		this.data = {};
-
 		this.isLoaded = false;
 
 		dataService.loadData().then(function (data) {
@@ -16,9 +15,9 @@
 			dataService.loadExpenses().then(function (data) {
 				var calculatedData = calculatorService.calculate(data);
 				angular.extend(_this.data, calculatedData);
-				_this.isLoaded = true;
 				_this.monthlyChartConfig = chartsService.prepareMonthlyChart(_this.data);
 				_this.totalsChartConfig = chartsService.prepareTotalsChart(_this.data);
+				_this.isLoaded = true;
 			});
 		});
 
@@ -70,10 +69,10 @@
 				margin: 0,
 				text: ''
 			},
-			loading: false,
 			credits: {
 				enabled: false
-			}
+			},
+			loading: true
 		};
 
 		this.totalsChartConfig = {
@@ -98,7 +97,7 @@
 			},
 			title: {text: '', margin: 0},
 			credits: {enabled: false},
-			loading: false
+			loading: true
 		};
 
 		this.prepareMonthlyChart = function (data) {
@@ -106,6 +105,8 @@
 				_this.monthlyChartConfig.series[0].data.push([transaction.date.getTime(), transaction.amount]);
 			});
 			this.monthlyChartConfig.yAxis.plotLines[0].value = data.dailyCompanyLimit;
+			this.monthlyChartConfig.loading = false;
+
 			return this.monthlyChartConfig;
 		};
 
@@ -167,7 +168,7 @@
 
 				this.totalsChartConfig.yAxis.max = data.totalCoveredByCompany;
 			}
-
+			this.totalsChartConfig.loading = false;
 
 			return this.totalsChartConfig;
 		};

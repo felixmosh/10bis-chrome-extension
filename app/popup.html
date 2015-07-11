@@ -20,7 +20,7 @@
 					שלום
 					{{vm.data.user.firstName}} {{vm.data.user.lastName}}</h1>
 			</header>
-			<main>
+			<main ng-if="vm.isLoaded">
 				<div class="half-block"
 					 ng-class="{'green': vm.data.remainingForToday >= vm.data.dailyCompanyLimit, 'gray': vm.data.remainingForToday < vm.data.dailyCompanyLimit}">
 					<h3>
@@ -45,6 +45,7 @@
 				<highchart class="chart stacked" config="vm.totalsChartConfig"></highchart>
 				<highchart class="chart" config="vm.monthlyChartConfig"></highchart>
 			</main>
+			<div ng-if="!vm.isLoaded">טוען נתונים...</div>
 		</div>
 
 		<div class="login-message" ng-if="!vm.userLoggedIn()">
