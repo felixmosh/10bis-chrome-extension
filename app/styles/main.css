@@ -24,7 +24,8 @@ a {
   text-align: center;
   line-height: 235px; }
   .login-message h6 {
-    font-size: 14px; }
+    font-size: 14px;
+    color: #000000; }
   .login-message a {
     cursor: pointer; }
 
