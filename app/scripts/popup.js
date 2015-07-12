@@ -142,7 +142,7 @@
 
 					this.totalsChartConfig.series.push({
 						data: [data.totalCoveredByCompany - data.monthlyUsed],
-						name: 'יתרה חודשית',
+						name: 'יתרה',
 						color: 'lightgray'
 					});
 				}
@@ -161,7 +161,7 @@
 
 					this.totalsChartConfig.series.push({
 						data: [data.totalCoveredByCompany - data.coveredByCompany],
-						name: 'יתרה חודשית',
+						name: 'יתרה',
 						color: 'lightgray'
 					});
 				}
