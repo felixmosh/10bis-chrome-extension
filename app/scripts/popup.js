@@ -37,14 +37,14 @@
 				tooltip: {
 					xDateFormat: '%A, %d/%m',
 					valueDecimals: 2,
-					valueSuffix: ' ₪'
+					valuePrefix: ' ₪'
 				},
 				legend: {
 					enabled: false
 				}
 			},
 			series: [{
-				name: 'Expense',
+				name: 'סכום',
 				data: []
 			}],
 			xAxis: {
@@ -84,7 +84,7 @@
 				},
 				tooltip: {
 					valueDecimals: 2,
-					valueSuffix: ' ₪'
+					valuePrefix: ' ₪'
 				}
 			},
 			series: [],
@@ -114,13 +114,13 @@
 			if(data.monthlyUsed > data.totalCoveredByCompany) {
 				this.totalsChartConfig.series.push({
 					data: [data.totalCoveredByCompany],
-					name: 'Covered by company',
+					name: 'מסובסד',
 					color: 'green'
 				});
 
 				this.totalsChartConfig.series.push({
 					data: [data.monthlyUsed - data.totalCoveredByCompany],
-					name: 'Exceed',
+					name: 'חריגה',
 					color: 'red'
 				});
 
@@ -130,38 +130,38 @@
 				if(data.monthlyUsed > data.coveredByCompany) {
 					this.totalsChartConfig.series.push({
 						data: [data.coveredByCompany],
-						name: 'Covered by company',
+						name: 'מסובסד',
 						color: 'green'
 					});
 
 					this.totalsChartConfig.series.push({
 						data: [data.monthlyUsed - data.coveredByCompany],
-						name: 'Exceed',
+						name: 'חריגה',
 						color: 'red'
 					});
 
 					this.totalsChartConfig.series.push({
 						data: [data.totalCoveredByCompany - data.monthlyUsed],
-						name: 'Monthly remaining',
+						name: 'יתרה חודשית',
 						color: 'lightgray'
 					});
 				}
 				else {
 					this.totalsChartConfig.series.push({
 						data: [data.monthlyUsed],
-						name: 'Monthly used',
+						name: 'שימוש חודשי',
 						color: 'lightgreen'
 					});
 
 					this.totalsChartConfig.series.push({
 						data: [data.coveredByCompany - data.monthlyUsed],
-						name: 'Daily remaining',
+						name: 'יתרה יומית',
 						color: 'green'
 					});
 
 					this.totalsChartConfig.series.push({
 						data: [data.totalCoveredByCompany - data.coveredByCompany],
-						name: 'Monthly remaining',
+						name: 'יתרה חודשית',
 						color: 'lightgray'
 					});
 				}

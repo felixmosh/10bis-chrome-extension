@@ -23,6 +23,10 @@ h1, h2, h3, h4, h5, h6 {
 	}
 }
 
+h6 {
+	color: #000000;
+}
+
 a {
 	outline: none;
 }
@@ -112,6 +116,7 @@ section {
 
 .clear {
 	clear: both;
+	margin-bottom: 10px;
 }
 
 .full-block {

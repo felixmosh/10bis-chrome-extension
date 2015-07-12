@@ -17,6 +17,9 @@ h1, h2, h3, h4, h5, h6 {
   .gray h1, .gray h2, .gray h3, .gray h4, .gray h5, .gray h6 {
     color: #000000; }
 
+h6 {
+  color: #000000; }
+
 a {
   outline: none; }
 
@@ -80,7 +83,8 @@ section {
     bottom: 2px; }
 
 .clear {
-  clear: both; }
+  clear: both;
+  margin-bottom: 10px; }
 
 .full-block {
   border-radius: 7px;
