@@ -1,4 +1,5 @@
 'use strict';
+/*global Highcharts*/
 
 (function () {
 	var baseUrl = 'https://www.10bis.co.il';
@@ -35,9 +36,11 @@
 					type: 'line'
 				},
 				tooltip: {
-					xDateFormat: '%A, %d/%m',
-					valueDecimals: 2,
-					valuePrefix: ' ₪'
+					useHTML:true,
+					formatter: function () {
+						console.log(this);
+						return '<div style="direction: rtl; text-align: right;"><strong>' + this.point.restaurant + '</strong><br />' + Highcharts.dateFormat('%A, %d/%m', this.point.x) + '<br />' + this.series.name + ': ' + this.point.y+' ₪</div>';
+					}
 				},
 				legend: {
 					enabled: false
@@ -102,7 +105,11 @@
 
 		this.prepareMonthlyChart = function (data) {
 			data.transactions.forEach(function (transaction) {
-				_this.monthlyChartConfig.series[0].data.push([transaction.date.getTime(), transaction.amount]);
+				_this.monthlyChartConfig.series[0].data.push({
+					x: transaction.date.getTime(),
+					y: transaction.amount,
+					restaurant: transaction.restaurant
+				});
 			});
 			this.monthlyChartConfig.yAxis.plotLines[0].value = data.dailyCompanyLimit;
 			this.monthlyChartConfig.loading = false;
@@ -111,7 +118,7 @@
 		};
 
 		this.prepareTotalsChart = function (data) {
-			if(data.monthlyUsed > data.totalCoveredByCompany) {
+			if (data.monthlyUsed > data.totalCoveredByCompany) {
 				this.totalsChartConfig.series.push({
 					data: [data.totalCoveredByCompany],
 					name: 'מסובסד',
@@ -127,7 +134,7 @@
 				this.totalsChartConfig.yAxis.max = data.monthlyUsed;
 			}
 			else {
-				if(data.monthlyUsed > data.coveredByCompany) {
+				if (data.monthlyUsed > data.coveredByCompany) {
 					this.totalsChartConfig.series.push({
 						data: [data.coveredByCompany],
 						name: 'מסובסד',
@@ -201,8 +208,8 @@
 
 		this.calculate = function (data) {
 			var wasTransactionToday = this.wasTransactionToday(data.transactions);
-			if (!wasTransactionToday) {
-				this.workingDaysTillToday--;
+			if (wasTransactionToday) {
+				this.workingDaysTillToday++;
 			}
 			data.coveredByCompany = data.dailyCompanyLimit * this.workingDaysTillToday;
 			data.totalCoveredByCompany = this.monthlyWorkingDays * data.dailyCompanyLimit;
@@ -212,10 +219,10 @@
 				data.remainingForToday = ((wasTransactionToday || !isWorkingDay(today)) ? 0 : data.dailyCompanyLimit);
 			}
 			else {
-				data.remainingForToday = Math.min(data.coveredByCompany - data.monthlyUsed, 100);
+				data.remainingForToday = Math.min(data.coveredByCompany - data.monthlyUsed + ((!wasTransactionToday) ? data.dailyCompanyLimit : 0), 100);
 			}
 
-			data.avgTillEndOfTheMonth = (data.totalCoveredByCompany - data.monthlyUsed) / (this.monthlyWorkingDays - this.workingDaysTillToday);
+			data.avgTillEndOfTheMonth = Math.max(0, (data.totalCoveredByCompany - data.monthlyUsed) / (this.monthlyWorkingDays - this.workingDaysTillToday));
 
 			return data;
 		};
@@ -328,7 +335,8 @@
 					transactions: response.data.Transactions.map(function (transaction) {
 						return {
 							amount: transaction.TransactionAmount,
-							date: new Date(parseInt(transaction.TransactionDate.replace(/[^\d]+/ig, '')))
+							date: new Date(parseInt(transaction.TransactionDate.replace(/[^\d]+/ig, ''))),
+							restaurant: transaction.ResName
 						};
 					})
 				};
