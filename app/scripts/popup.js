@@ -2,7 +2,7 @@
 /*global Highcharts*/
 
 (function () {
-	var baseUrl = 'https://www.10bis.co.il';
+	var baseUrl = 'http://www.10bis.co.il';
 	var app = angular.module('10BisApp', ['highcharts-ng']);
 
 	app.controller('mainCtrl', ['dataService', 'calculatorService', 'chartsService', function (dataService, calculatorService, chartsService) {
@@ -36,10 +36,16 @@
 					type: 'line'
 				},
 				tooltip: {
-					useHTML:true,
+					useHTML: true,
 					formatter: function () {
-						console.log(this);
-						return '<div style="direction: rtl; text-align: right;"><strong>' + this.point.restaurant + '</strong><br />' + Highcharts.dateFormat('%A, %d/%m', this.point.x) + '<br />' + this.series.name + ': ' + this.point.y+' ₪</div>';
+						var hasManyRestaurants = this.point.expenses.length > 1;
+						var restaurantsList = this.point.expenses.map(function (item) {
+							return item.restaurant + ((hasManyRestaurants) ? ' - ' + item.amount + ' ₪' : '');
+						}).join('<br />');
+						return '<div class="tooltip-content">' +
+							restaurantsList + '<br />' +
+							'<span>' + Highcharts.dateFormat('%A, %d/%m', this.point.x) + '</span>' +
+							'<strong>' + this.series.name + ': ' + this.point.y + ' ₪</strong></div>';
 					}
 				},
 				legend: {
@@ -47,7 +53,7 @@
 				}
 			},
 			series: [{
-				name: 'סכום',
+				name: 'סה״כ',
 				data: []
 			}],
 			xAxis: {
@@ -86,8 +92,10 @@
 					enabled: false
 				},
 				tooltip: {
-					valueDecimals: 2,
-					valuePrefix: ' ₪'
+					useHTML: true,
+					formatter: function () {
+						return '<div class="tooltip-content">' + this.series.name + ': <strong>' + this.point.y + ' ₪</strong></div>';
+					}
 				}
 			},
 			series: [],
@@ -104,12 +112,28 @@
 		};
 
 		this.prepareMonthlyChart = function (data) {
+			var lastDay = -1;
 			data.transactions.forEach(function (transaction) {
-				_this.monthlyChartConfig.series[0].data.push({
-					x: transaction.date.getTime(),
-					y: transaction.amount,
-					restaurant: transaction.restaurant
-				});
+				// Join expenses from the same day
+				if (lastDay === transaction.date.getDate()) {
+					var lastEntry = _this.monthlyChartConfig.series[0].data[_this.monthlyChartConfig.series[0].data.length - 1];
+					lastEntry.y += transaction.amount;
+					lastEntry.expenses.push({
+						amount: transaction.amount,
+						restaurant: transaction.restaurant
+					});
+				}
+				else {
+					_this.monthlyChartConfig.series[0].data.push({
+						x: transaction.date.getTime(),
+						y: transaction.amount,
+						expenses: [{
+							amount: transaction.amount,
+							restaurant: transaction.restaurant
+						}]
+					});
+				}
+				lastDay = transaction.date.getDate();
 			});
 			this.monthlyChartConfig.yAxis.plotLines[0].value = data.dailyCompanyLimit;
 			this.monthlyChartConfig.loading = false;
@@ -332,10 +356,12 @@
 				return {
 					monthlyUsed: response.data.Moneycards[0].MonthlyUsage,
 					dailyCompanyLimit: 35,
-					transactions: response.data.Transactions.map(function (transaction) {
+					transactions: response.data.Transactions.filter(function (transaction) {
+						return transaction.PaymentMethod === 'Moneycard';
+					}).map(function (transaction) {
 						return {
 							amount: transaction.TransactionAmount,
-							date: new Date(parseInt(transaction.TransactionDate.replace(/[^\d]+/ig, ''))),
+							date: new Date(parseInt(transaction.TransactionDate.replace(/[^\d]+/ig, ''), 10)),
 							restaurant: transaction.ResName
 						};
 					})

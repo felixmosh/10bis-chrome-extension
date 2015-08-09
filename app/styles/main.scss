@@ -46,7 +46,7 @@ a {
 }
 
 .green {
-	background-color:rgb(67,184,0);
+	background-color: rgb(67, 184, 0);
 }
 
 .red {
@@ -54,12 +54,12 @@ a {
 }
 
 .gray {
-	background-color:rgb(224,224,224);
+	background-color: rgb(224, 224, 224);
 }
 
 header {
-	width:325px;
-	border-radius:7px;
+	width: 325px;
+	border-radius: 7px;
 	padding: 5px 10px;
 	margin-bottom: 9px;
 	position: relative;
@@ -74,18 +74,17 @@ header {
 	}
 }
 
-
 section {
 	overflow: hidden;
 }
 
 .half-block {
-	border-radius:7px;
+	border-radius: 7px;
 	width: 158px;
 	float: right;
 	vertical-align: top;
 	margin: 0;
-	height:91px;
+	height: 91px;
 	padding: 5px 10px 10px 10px;
 	text-align: center;
 	overflow: hidden;
@@ -120,7 +119,7 @@ section {
 }
 
 .full-block {
-	border-radius:7px;
+	border-radius: 7px;
 	width: 100%;
 	margin-top: 9px;
 	padding: 10px 13px;
@@ -136,5 +135,17 @@ section {
 
 	&.stacked {
 		height: 100px;
+	}
+}
+
+.tooltip-content {
+	direction: rtl;
+	text-align: right;
+
+	span {
+		color: #919191;
+		font-size: 11px;
+		display: block;
+		margin: 8px 0;
 	}
 }
