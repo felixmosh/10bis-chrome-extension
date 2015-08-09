@@ -94,7 +94,7 @@
 				tooltip: {
 					useHTML: true,
 					formatter: function () {
-						return '<div class="tooltip-content">' + this.series.name + ': <strong>' + this.point.y + ' ₪</strong></div>';
+						return '<div class="tooltip-content">' + this.series.name + ': <strong>' + this.point.y.toFixed(2) + ' ₪</strong></div>';
 					}
 				}
 			},
