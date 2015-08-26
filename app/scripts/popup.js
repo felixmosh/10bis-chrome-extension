@@ -33,7 +33,7 @@
 		this.monthlyChartConfig = {
 			options: {
 				chart: {
-					type: 'line'
+					type: 'column'
 				},
 				tooltip: {
 					useHTML: true,
