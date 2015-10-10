@@ -131,10 +131,13 @@ section {
 
 .chart {
 	direction: ltr;
-	max-height: 200px;
 
 	&.stacked {
 		height: 100px;
+	}
+
+	&.columns {
+		height: 200px;
 	}
 }
 

@@ -54,12 +54,17 @@
 			},
 			series: [{
 				name: 'סה״כ',
+				pointRange: 24 * 3600 * 1000,
 				data: []
 			}],
 			xAxis: {
 				type: 'datetime',
+				tickInterval: 24 * 3600 * 1000,
 				dateTimeLabelFormats: {
 					day: '%d/%m'
+				},
+				labels: {
+					step: 5
 				}
 			},
 			yAxis: {
@@ -347,7 +352,7 @@
 		this.loadExpenses = function () {
 			var queryParams = {
 				encryptedUserId: data.user.id,
-				dateBias: 0,
+				dateBias: -2,
 				WebsiteId: '10bis',
 				DomainId: '10bis'
 			};

@@ -95,10 +95,11 @@ section {
     color: #000000; }
 
 .chart {
-  direction: ltr;
-  max-height: 200px; }
+  direction: ltr; }
   .chart.stacked {
     height: 100px; }
+  .chart.columns {
+    height: 200px; }
 
 .tooltip-content {
   direction: rtl;
