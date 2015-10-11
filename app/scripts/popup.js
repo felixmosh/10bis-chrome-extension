@@ -64,7 +64,7 @@
 					day: '%d/%m'
 				},
 				labels: {
-					step: 5
+					step: 2
 				}
 			},
 			yAxis: {
