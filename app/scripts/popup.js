@@ -352,7 +352,7 @@
 		this.loadExpenses = function () {
 			var queryParams = {
 				encryptedUserId: data.user.id,
-				dateBias: -2,
+				dateBias: 0,
 				WebsiteId: '10bis',
 				DomainId: '10bis'
 			};
