@@ -3,9 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<!-- build:css styles/popup-vendor.css -->
-	<!-- bower:css -->
-	<!-- endbower -->
 	<!-- endbuild -->
+	<link href="http://fonts.googleapis.com/earlyaccess/opensanshebrew.css" rel="stylesheet">
 	<!-- build:css styles/main.css -->
 	<link href="styles/main.css" rel="stylesheet">
 	<!-- endbuild -->
@@ -14,12 +13,19 @@
 	<h1>'Allo, 'Allo!</h1>
 
 	<!-- build:js scripts/popup-vendor.js -->
-	<!-- bower:js -->
-	<!-- endbower -->
+	<script src="vendors/es6-shim/es6-shim.min.js"></script>
+	<script src="vendors/systemjs/dist/system-polyfills.js"></script>
+	<script src="vendors/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
+	<script src="vendors/angular2/bundles/angular2-polyfills.js"></script>
+	<script src="vendors/systemjs/dist/system.src.js"></script>
+	<script src="vendors/rxjs/bundles/Rx.js"></script>
+	<script src="vendors/angular2/bundles/angular2.dev.js"></script>
 	<!-- endbuild -->
 
 	<!-- build:js scripts/popup.js -->
+	<script src="scripts/bootstrap.js"></script>
 	<script src="scripts/popup.js"></script>
 	<!-- endbuild -->
+	<main></main>
 </body>
 </html>
