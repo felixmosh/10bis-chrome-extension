@@ -46,12 +46,6 @@ gulp.task('compile-ts', ['ts-lint'], function () {
 		.pipe(gulp.dest('app/scripts/'));
 });
 
-gulp.task('lint' ,lint('app/scripts/**/*.js', {
-	env: {
-		es6: false
-	}
-}));
-
 gulp.task('images', () => {
 	return gulp.src('app/images/**/*')
 		.pipe($.if($.if.isFile, $.cache($.imagemin({
@@ -99,7 +93,7 @@ gulp.task('chromeManifest', () => {
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('watch', ['compile-ts', 'lint', 'html'], () => {
+gulp.task('watch', ['compile-ts', 'html'], () => {
 	$.livereload.listen();
 
 	gulp.watch([
@@ -111,7 +105,6 @@ gulp.task('watch', ['compile-ts', 'lint', 'html'], () => {
 		'app/_locales/**/*.json'
 	]).on('change', $.livereload.reload);
 
-	gulp.watch('app/scripts/**/*.js', ['lint']);
 	gulp.watch('app/scripts/**/*.ts', ['compile-ts']);
 });
 
@@ -126,13 +119,13 @@ gulp.task('package', function () {
 		.pipe(gulp.dest('package'));
 });
 
-gulp.task('build', (cb) => {
+gulp.task('build', ['clean'], (cb) => {
 	runSequence(
-		'lint', 'chromeManifest',
+		'compile-ts', 'chromeManifest',
 		['html', 'images', 'extras'],
 		'size', cb);
 });
 
-gulp.task('default', ['clean'], cb => {
-	runSequence('build', cb);
+gulp.task('default', cb => {
+	runSequence(['watch']);
 });
