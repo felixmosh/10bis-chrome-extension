@@ -5218,7 +5218,7 @@ declare namespace chrome.runtime {
      * Returns a DirectoryEntry for the package directory.
      * @since Chrome 29.
      */
-	export function getPackageDirectoryEntry(callback: (directoryEntry: DirectoryEntry) => void): void;
+	export function getPackageDirectoryEntry(callback: (directoryEntry: any) => void): void;
     /**
      * Returns information about the current platform.
      * @since Chrome 29.
@@ -5804,9 +5804,9 @@ declare namespace chrome.tabCapture {
 		/** Optional. */
         video?: boolean;
 		/** Optional. */
-		audioConstraints?: MediaStreamConstraints;
+		audioConstraints?: any;
 		/** Optional. */
-		videoConstraints?: MediaStreamConstraints;
+		videoConstraints?: any;
 	}
 
 	interface CaptureStatusChangedEvent extends chrome.events.Event<(info: CaptureInfo) => void> {}
@@ -5816,7 +5816,7 @@ declare namespace chrome.tabCapture {
 	 * @param options Configures the returned media stream.
 	 * @param callback Callback with either the tab capture stream or null.
 	 */
-    export function capture(options: CaptureOptions, callback: (stream: MediaStream) => void): void;
+    export function capture(options: CaptureOptions, callback: (stream: any) => void): void;
 	/**
 	 * Returns a list of tabs that have requested capture or are being captured, i.e. status != stopped and status != error. This allows extensions to inform the user that there is an existing tab capture that would prevent a new tab capture from succeeding (or to prevent redundant requests for the same tab).
 	 * @param callback Callback invoked with CaptureInfo[] for captured tabs.
