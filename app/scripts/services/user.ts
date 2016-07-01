@@ -26,7 +26,7 @@ export class UserService {
 			search.set('WebsiteId', '10bis');
 			search.set('DomainId', '10bis');
 
-			this.user = this.http.get(this.Configs.baseUrl + '/api/Login', {search})
+			this.user = this.http.get(this.Configs.baseUrl + '/Login', {search})
 				.map((response: Response) => response.json())
 				.toPromise()
 				.then((response: ITB.Response.Login) => {

@@ -1,15 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../services/user';
 import {ChromeService} from '../../services/chrome';
+import {MonthlyStatsComponent} from '../monthly-stats/monthly-stats';
 
 @Component({
 	selector: 'main',
 	templateUrl: 'scripts/components/main/main.html',
-	providers: [UserService, ChromeService]
+	providers: [UserService, ChromeService],
+	directives: [MonthlyStatsComponent]
 })
 export class MainComponent implements OnInit {
 	public isLoaded: boolean = false;
-	public isLoggedIn: boolean = false;
 	public user: ITB.User;
 
 	constructor(private userService: UserService) {
@@ -21,12 +22,11 @@ export class MainComponent implements OnInit {
 			.then((user: ITB.User) => {
 				this.user = user;
 
-				this.isLoggedIn = true;
 				this.isLoaded = true;
 			});
 	}
 
-	public isUserLoggedIn() {
-		return this.isLoggedIn;
+	public isLoggedIn(): boolean {
+		return !!this.user;
 	}
 }

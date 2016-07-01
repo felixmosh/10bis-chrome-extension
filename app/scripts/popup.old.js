@@ -263,7 +263,7 @@
 				}).length > 0;
 		};
 
-		this.updateWorkingDays();
+		this.calculateWorkingDays();
 	}]);
 
 	app.service('dataService', ['$http', '$q', function ($http, $q) {

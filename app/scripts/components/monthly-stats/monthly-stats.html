@@ -1,0 +1,34 @@
+<section *ngIf="isLoaded">
+	<div class="half-block"
+		 [ngClass]="{'green': stats.remainingForToday >= stats.dailyCompanyLimit, 'gray': stats.remainingForToday < stats.dailyCompanyLimit}">
+		<h3>
+			יתרתך להיום:
+		</h3>
+		<h4>{{stats.remainingForToday | currency}}</h4>
+		<h5>
+			הגבלה יומית:
+			{{stats.dailyCompanyLimit | currency}}</h5>
+	</div>
+	<div class="half-block"
+		 [ngClass]="{'green': stats.avgTillEndOfTheMonth >= stats.dailyCompanyLimit, 'red': stats.avgTillEndOfTheMonth < stats.dailyCompanyLimit}">
+		<h3>
+			סבסוד יומי:
+		</h3>
+		<h4>{{stats.avgTillEndOfTheMonth | currency}}</h4>
+		<h5>
+			בממוצע, עד סוף החודש.
+		</h5>
+	</div>
+	<div class="clear"></div>
+	<!--<h6>-->
+		<!--מאזן תקציב חודשי:-->
+	<!--</h6>-->
+	<!--<highchart class="chart stacked" config="vm.totalsChartConfig"></highchart>-->
+	<!--<h6>-->
+		<!--פירוט חיובים חודשי:-->
+	<!--</h6>-->
+	<!--<highchart class="chart columns" config="vm.monthlyChartConfig"></highchart>-->
+</section>
+<section *ngIf="!isLoaded">
+	טוען נתונים...
+</section>

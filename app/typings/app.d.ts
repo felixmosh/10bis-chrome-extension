@@ -18,8 +18,29 @@ declare module ITB {
 			UserLastName: string;
 			UserThumbnail: string;
 		}
+
+		export interface Stats {
+			Moneycards: Moneycards;
+			Transactions: Transaction[];
+		}
+
+		export interface Transaction {
+			ResName: string;
+			TransactionAmount: number;
+			TransactionDate: string;
+			PaymentMethod: string;
+		}
+
+		export interface Moneycards {
+			MonthlyLimit: number;
+			DailyLimit: number;
+			MonthlyUsage: number;
+			DailyUsage: number;
+			DailyBalance: number;
+			MonthlyBalance: number;
+		}
 	}
-	
+
 	export interface User {
 		id: number;
 		firstName: string;
@@ -27,5 +48,22 @@ declare module ITB {
 		email: string;
 		cellphone: string;
 		encryptedId: string;
+	}
+
+	export interface Stats {
+		transactions: Transaction[];
+		monthlyUsed: number;
+		dailyCompanyLimit: number;
+		coveredByCompany: number;
+		onMe: number;
+		totalCoveredByCompany: number;
+		remainingForToday: number;
+		avgTillEndOfTheMonth: number;
+	}
+
+	export interface Transaction {
+		restaurant: string;
+		amount: number;
+		date: Date;
 	}
 }

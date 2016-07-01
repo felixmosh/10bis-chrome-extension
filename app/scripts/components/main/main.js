@@ -11,11 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var user_1 = require('../../services/user');
 var chrome_1 = require('../../services/chrome');
+var monthly_stats_1 = require('../monthly-stats/monthly-stats');
 var MainComponent = (function () {
     function MainComponent(userService) {
         this.userService = userService;
         this.isLoaded = false;
-        this.isLoggedIn = false;
     }
     MainComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -23,18 +23,18 @@ var MainComponent = (function () {
             .then(function (cookie) { return _this.userService.getUserData(cookie); })
             .then(function (user) {
             _this.user = user;
-            _this.isLoggedIn = true;
             _this.isLoaded = true;
         });
     };
-    MainComponent.prototype.isUserLoggedIn = function () {
-        return this.isLoggedIn;
+    MainComponent.prototype.isLoggedIn = function () {
+        return !!this.user;
     };
     MainComponent = __decorate([
         core_1.Component({
             selector: 'main',
             templateUrl: 'scripts/components/main/main.html',
-            providers: [user_1.UserService, chrome_1.ChromeService]
+            providers: [user_1.UserService, chrome_1.ChromeService],
+            directives: [monthly_stats_1.MonthlyStatsComponent]
         }), 
         __metadata('design:paramtypes', [user_1.UserService])
     ], MainComponent);
