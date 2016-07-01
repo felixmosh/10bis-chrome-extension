@@ -42,14 +42,7 @@ export class UserService {
 					}
 				});
 		}
-		
+
 		return this.user;
-		// return $http.get(this.Configs.baseUrl + '/api/Login', {search}).then(function (response) {
-		// 	return (response.data.Success) ? {
-		// 		id: response.data.UserData.EncryptedUserId,
-		// 		firstName: response.data.UserData.UserFirstName,
-		// 		lastName: response.data.UserData.UserLastName
-		// 	} : {};
-		// });
 	}
 }
