@@ -1,18 +1,20 @@
 import {Component, OnInit, OnDestroy, Input} from '@angular/core';
+import {CurrencyPipe} from '@angular/common';
 import {ExpensesCalculatorService} from '../../services/expenses-calculator';
 import {StatsService} from '../../services/stats';
-import {Observable} from 'rxjs/Rx';
-import {CurrencyPipe} from '@angular/common';
+import {Subscription} from 'rxjs/Rx';
+import {BalanceComponent} from './balance/balance';
 
 @Component({
 	selector: 'monthly-stats',
 	templateUrl: 'scripts/components/monthly-stats/monthly-stats.html',
 	providers: [StatsService, ExpensesCalculatorService],
+	directives: [BalanceComponent],
 	pipes: [CurrencyPipe]
 })
 export class MonthlyStatsComponent implements OnInit, OnDestroy {
 	public isLoaded: boolean = false;
-	public subscription: Observable<ITB.Stats>;
+	public subscription: Subscription;
 	public stats: ITB.Stats;
 	@Input() userId: string;
 
@@ -20,7 +22,7 @@ export class MonthlyStatsComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit() {
-		this.statsService.getData(this.userId)
+		this.subscription = this.statsService.getData(this.userId)
 			.subscribe((stats: ITB.Stats) => {
 				this.stats = stats;
 				this.isLoaded = true;
@@ -28,6 +30,6 @@ export class MonthlyStatsComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnDestroy() {
-		// this.subscription.dispose();
+		this.subscription.unsubscribe();
 	}
 }
