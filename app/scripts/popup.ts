@@ -1,8 +1,9 @@
-///<reference path="../../typings/browser.d.ts"/>
-import { bootstrap }    from '@angular/platform-browser-dynamic';
-import {provide} from '@angular/core';
-import {HTTP_PROVIDERS} from '@angular/http';
-import {MainComponent} from './components/main/main';
-import {Configs} from './commons/configs';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import {enableProdMode} from '@angular/core';
+import {AppModule} from './app.module';
 
-bootstrap(MainComponent, [provide('Configs', {useValue: Configs}), HTTP_PROVIDERS]);
+platformBrowserDynamic().bootstrapModule(AppModule);
+
+if (process.env.ENV === 'production') {
+	enableProdMode();
+}

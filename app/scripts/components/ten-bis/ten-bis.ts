@@ -1,15 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../services/user';
 import {ChromeService} from '../../services/chrome';
-import {MonthlyStatsComponent} from '../monthly-stats/monthly-stats';
+import {StatsService} from '../../services/stats';
+import {ExpensesCalculatorService} from '../../services/expenses-calculator';
+require('./ten-bis.scss');
 
 @Component({
-	selector: 'main',
-	templateUrl: 'scripts/components/main/main.html',
-	providers: [UserService, ChromeService],
-	directives: [MonthlyStatsComponent]
+	selector: 'ten-bis',
+	templateUrl: './ten-bis.html',
+	providers: [UserService, ChromeService, StatsService, ExpensesCalculatorService]
 })
-export class MainComponent implements OnInit {
+export class TenBisComponent implements OnInit {
 	public isLoaded: boolean = false;
 	public user: ITB.User;
 
@@ -21,9 +22,8 @@ export class MainComponent implements OnInit {
 			.then((cookie) => this.userService.getUserData(cookie))
 			.then((user: ITB.User) => {
 				this.user = user;
-
-				this.isLoaded = true;
-			});
+			}).catch(() => this.user = null)
+			.then(() => this.isLoaded = true);
 	}
 
 	public isLoggedIn(): boolean {

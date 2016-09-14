@@ -1,0 +1,5 @@
+<nav class="month-navigator">
+	<button (click)="onNext()" class="next-arrow" [disabled]="dateBias===0"></button>
+	{{currentDate | date:'MMMM y'}}
+	<button (click)="onPrev()" class="prev-arrow"></button>
+</nav>

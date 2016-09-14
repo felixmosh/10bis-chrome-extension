@@ -14,7 +14,7 @@ export class StatsService {
 		this.stats = new BehaviorSubject(<any>{});
 	}
 
-	public getData(userId: string, bias = -1): Observable<ITB.Stats> {
+	public getData(userId: string, bias = 0): Observable<ITB.Stats> {
 		let search: URLSearchParams = new URLSearchParams();
 		search.set('encryptedUserId', userId);
 		search.set('dateBias', `${bias}`);
@@ -22,6 +22,7 @@ export class StatsService {
 		search.set('DomainId', '10bis');
 
 		this.http.get(`${this.Configs.baseUrl}/UserTransactionsReport`, {search})
+			.first()
 			.map((response: Response) => response.json())
 			.map((response: ITB.Response.Stats) => this.convertToStats(response))
 			.subscribe((response: ITB.Stats) => {

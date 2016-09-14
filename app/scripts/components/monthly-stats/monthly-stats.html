@@ -4,27 +4,21 @@
 		<h3>
 			יתרתך להיום:
 		</h3>
-		<h4>{{stats.remainingForToday | currency}}</h4>
-		<h5>
-			הגבלה יומית:
-			{{stats.dailyCompanyLimit | currency}}</h5>
+		<h4>{{stats.remainingForToday | currency:'ILS':true}}</h4>
+		<h5>הגבלה יומית:
+			{{stats.dailyCompanyLimit | currency:'ILS':true}}</h5>
 	</div>
 	<div class="half-block"
 		 [ngClass]="{'green': stats.avgTillEndOfTheMonth >= stats.dailyCompanyLimit, 'red': stats.avgTillEndOfTheMonth < stats.dailyCompanyLimit}">
 		<h3>
-			סבסוד יומי:
-		</h3>
-		<h4>{{stats.avgTillEndOfTheMonth | currency}}</h4>
-		<h5>
-			בממוצע, עד סוף החודש.
-		</h5>
+			סבסוד יומי:</h3>
+		<h4>{{stats.avgTillEndOfTheMonth | currency:'ILS':true}}</h4>
+		<h5>בממוצע, עד סוף החודש.</h5>
 	</div>
 	<div class="clear"></div>
-	<balance [data]="stats"></balance>
-	<!--<h6>-->
-		<!--פירוט חיובים חודשי:-->
-	<!--</h6>-->
-	<!--<highchart class="chart columns" config="vm.monthlyChartConfig"></highchart>-->
+	<month-navigator [dateBias]="dateBias" (monthChange)="onMonthChange($event)"></month-navigator>
+	<balance [stats]="stats"></balance>
+	<detailed-charges [stats]="stats"></detailed-charges>
 </section>
 <section *ngIf="!isLoaded">
 	טוען נתונים...

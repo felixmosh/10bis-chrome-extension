@@ -1,3 +1,2 @@
 <h6>מאזן תקציב חודשי:</h6>
-<chart [options]="options" class="chart stacked"></chart>
-<highchart class="chart stacked" config="vm.totalsChartConfig"></highchart>
+<chart [options]="options" class="chart stacked" *ngIf="isLoaded" (load)="saveInstance($event.context)"></chart>

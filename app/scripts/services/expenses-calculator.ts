@@ -18,7 +18,7 @@ export class ExpensesCalculatorService {
 		}
 		stats.coveredByCompany = stats.dailyCompanyLimit * this.workingDaysTillToday;
 		stats.totalCoveredByCompany = stats.dailyCompanyLimit * this.monthlyWorkingDays;
-		stats.onMe = Math.max(0, stats.monthlyUsed - stats.coveredByCompany);
+		stats.onMe = parseFloat(Math.max(0, stats.monthlyUsed - stats.coveredByCompany).toFixed(2));
 
 		if (stats.onMe > 0) {
 			stats.remainingForToday = ((wasTransactionToday || !this.isWorkingDay(this.today)) ? 0 : stats.dailyCompanyLimit);
@@ -28,7 +28,7 @@ export class ExpensesCalculatorService {
 		}
 
 		stats.avgTillEndOfTheMonth = (stats.totalCoveredByCompany - stats.monthlyUsed) / (this.monthlyWorkingDays - this.workingDaysTillToday);
-		stats.avgTillEndOfTheMonth = Math.max(0, stats.avgTillEndOfTheMonth);
+		stats.avgTillEndOfTheMonth = Math.max(0, parseFloat(stats.avgTillEndOfTheMonth.toFixed(2)));
 		return stats;
 	}
 
@@ -49,7 +49,7 @@ export class ExpensesCalculatorService {
 	}
 
 	private isWorkingDay(date) {
-		return parseInt(date.getDay(), 10) / 5 === 0;
+		return Math.floor(date.getDay() / 5) === 0;
 	}
 
 	private wasTransactionToday(transactions: ITB.Transaction[]): boolean {

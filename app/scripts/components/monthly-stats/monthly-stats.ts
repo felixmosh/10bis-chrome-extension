@@ -1,35 +1,36 @@
 import {Component, OnInit, OnDestroy, Input} from '@angular/core';
-import {CurrencyPipe} from '@angular/common';
-import {ExpensesCalculatorService} from '../../services/expenses-calculator';
 import {StatsService} from '../../services/stats';
 import {Subscription} from 'rxjs/Rx';
-import {BalanceComponent} from './balance/balance';
 
 @Component({
 	selector: 'monthly-stats',
-	templateUrl: 'scripts/components/monthly-stats/monthly-stats.html',
-	providers: [StatsService, ExpensesCalculatorService],
-	directives: [BalanceComponent],
-	pipes: [CurrencyPipe]
+	templateUrl: './monthly-stats.html',
 })
 export class MonthlyStatsComponent implements OnInit, OnDestroy {
 	public isLoaded: boolean = false;
 	public subscription: Subscription;
 	public stats: ITB.Stats;
 	@Input() userId: string;
+	private dateBias: number = 0;
 
 	constructor(private statsService: StatsService) {
 	}
 
 	public ngOnInit() {
-		this.subscription = this.statsService.getData(this.userId)
+		this.subscription = this.statsService.getData(this.userId, this.dateBias)
 			.subscribe((stats: ITB.Stats) => {
 				this.stats = stats;
+				console.log('stats', this.stats);
 				this.isLoaded = true;
 			});
 	}
 
 	public ngOnDestroy() {
 		this.subscription.unsubscribe();
+	}
+
+	public onMonthChange($event) {
+		this.dateBias = $event.value;
+		this.statsService.getData(this.userId, this.dateBias);
 	}
 }
