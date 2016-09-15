@@ -20,7 +20,6 @@ export class MonthlyStatsComponent implements OnInit, OnDestroy {
 		this.subscription = this.statsService.getData(this.userId, this.dateBias)
 			.subscribe((stats: ITB.Stats) => {
 				this.stats = stats;
-				console.log('stats', this.stats);
 				this.isLoaded = true;
 			});
 	}

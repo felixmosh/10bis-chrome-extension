@@ -117,7 +117,6 @@ export class DetailedChargersComponent implements OnInit, OnChanges {
 
 		this.options.yAxis.plotLines[0].value = stats.dailyCompanyLimit;
 		this.options.xAxis.labels.step = Math.max(2, Math.round(this.options.series[0].data.length / 4.5));
-		console.log(this.options.xAxis.labels.step, this.options.series[0].data.length);
 
 		this.isLoaded = true;
 

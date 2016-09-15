@@ -121,7 +121,7 @@ gulp.task('package', function () {
 
 gulp.task('build', ['clean'], (cb) => {
 	runSequence(
-		'compile-ts', 'chromeManifest',
+		'chromeManifest',
 		['html', 'images', 'extras'],
 		'size', cb);
 });
