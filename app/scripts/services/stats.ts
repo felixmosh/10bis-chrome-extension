@@ -14,17 +14,17 @@ export class StatsService {
 		this.stats = new BehaviorSubject(<any>{});
 	}
 
-	public getData(userId: string, bias = 0): Observable<ITB.Stats> {
+	public getData(userId: string, monthBias = 0): Observable<ITB.Stats> {
 		let search: URLSearchParams = new URLSearchParams();
 		search.set('encryptedUserId', userId);
-		search.set('dateBias', `${bias}`);
+		search.set('dateBias', `${monthBias}`);
 		search.set('WebsiteId', '10bis');
 		search.set('DomainId', '10bis');
 
 		this.http.get(`${this.Configs.baseUrl}/UserTransactionsReport`, {search})
 			.first()
 			.map((response: Response) => response.json())
-			.map((response: ITB.Response.Stats) => this.convertToStats(response))
+			.map((response: ITB.Response.Stats) => this.convertToStats(response, monthBias))
 			.subscribe((response: ITB.Stats) => {
 				this.stats.next(response);
 			});
@@ -32,12 +32,12 @@ export class StatsService {
 		return this.stats.asObservable();
 	}
 
-	private convertToStats(response: ITB.Response.Stats): ITB.Stats {
+	private convertToStats(response: ITB.Response.Stats, monthBias: number): ITB.Stats {
 		return this.expensesCalculator.calculate(<ITB.Stats>{
 			dailyCompanyLimit: 35,
 			monthlyUsed: response.Moneycards[0].MonthlyUsage,
 			transactions: this.mapTransactions(response.Transactions)
-		});
+		}, monthBias);
 	}
 
 	private mapTransactions(transactions: ITB.Response.Transaction[]): ITB.Transaction[] {

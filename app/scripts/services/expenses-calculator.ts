@@ -3,15 +3,15 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class ExpensesCalculatorService {
-	private workingDaysTillToday = 0;
-	private monthlyWorkingDays = 0;
-	private today = new Date();
+	private workingDaysTillToday: number;
+	private monthlyWorkingDays: number;
+	private today: Date;
 
 	constructor() {
-		this.calculateWorkingDays();
 	}
 
-	public calculate(stats: ITB.Stats) {
+	public calculate(stats: ITB.Stats, monthBias: number) {
+		this.resetCounters(monthBias);
 		let wasTransactionToday = this.wasTransactionToday(stats.transactions);
 		if (wasTransactionToday) {
 			this.workingDaysTillToday++;
@@ -20,15 +20,22 @@ export class ExpensesCalculatorService {
 		stats.totalCoveredByCompany = stats.dailyCompanyLimit * this.monthlyWorkingDays;
 		stats.onMe = parseFloat(Math.max(0, stats.monthlyUsed - stats.coveredByCompany).toFixed(2));
 
-		if (stats.onMe > 0) {
-			stats.remainingForToday = ((wasTransactionToday || !this.isWorkingDay(this.today)) ? 0 : stats.dailyCompanyLimit);
+		if (monthBias >= 0) {
+
+			if (stats.onMe > 0) {
+				stats.remainingForToday = ((wasTransactionToday || !this.isWorkingDay(this.today)) ? 0 : stats.dailyCompanyLimit);
+			} else {
+				stats.remainingForToday = stats.coveredByCompany - stats.monthlyUsed + ((!wasTransactionToday) ? stats.dailyCompanyLimit : 0);
+				stats.remainingForToday = Math.min(100, stats.remainingForToday);
+			}
+
+			stats.avgTillEndOfTheMonth = (stats.totalCoveredByCompany - stats.monthlyUsed) / (this.monthlyWorkingDays - this.workingDaysTillToday);
+			stats.avgTillEndOfTheMonth = Math.max(0, parseFloat(stats.avgTillEndOfTheMonth.toFixed(2)));
 		} else {
-			stats.remainingForToday = stats.coveredByCompany - stats.monthlyUsed + ((!wasTransactionToday) ? stats.dailyCompanyLimit : 0);
-			stats.remainingForToday = Math.min(100, stats.remainingForToday);
+			stats.remainingForToday = 0;
+			stats.avgTillEndOfTheMonth = 0;
 		}
 
-		stats.avgTillEndOfTheMonth = (stats.totalCoveredByCompany - stats.monthlyUsed) / (this.monthlyWorkingDays - this.workingDaysTillToday);
-		stats.avgTillEndOfTheMonth = Math.max(0, parseFloat(stats.avgTillEndOfTheMonth.toFixed(2)));
 		return stats;
 	}
 
@@ -54,5 +61,19 @@ export class ExpensesCalculatorService {
 
 	private wasTransactionToday(transactions: ITB.Transaction[]): boolean {
 		return transactions.some((transaction) => transaction.date.getDate() === this.today.getDate());
+	}
+
+	private resetCounters(monthBias: number) {
+		this.monthlyWorkingDays = 0;
+		this.workingDaysTillToday = 0;
+
+		let realToday = new Date();
+		if (monthBias < 0) {
+			// last day of the month
+			realToday = new Date(realToday.getFullYear(), realToday.getMonth() + monthBias + 1, 0);
+		}
+
+		this.today = realToday;
+		this.calculateWorkingDays();
 	}
 }
