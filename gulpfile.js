@@ -5,8 +5,6 @@ var del = require('del');
 var runSequence = require('run-sequence');
 
 const $ = gulpLoadPlugins();
-var tsProject = $.typescript.createProject('tsconfig.json');
-
 
 gulp.task('extras', () => {
 	return gulp.src([
@@ -18,32 +16,6 @@ gulp.task('extras', () => {
 		base: 'app',
 		dot: true
 	}).pipe(gulp.dest('dist'));
-});
-
-function lint(files, options) {
-	return () => {
-		return gulp.src(files)
-			.pipe($.eslint(options))
-			.pipe($.eslint.format());
-	};
-}
-
-gulp.task('ts-lint', function () {
-	return gulp.src('app/scripts/**/*.ts')
-		.pipe($.tslint())
-		.pipe($.tslint.report('prose'));
-});
-
-gulp.task('compile-ts', ['ts-lint'], function () {
-	var sourceTsFiles = ['app/scripts/**/*.ts'];
-
-	var tsResult = gulp.src(sourceTsFiles)
-		.pipe($.sourcemaps.init())
-		.pipe($.typescript(tsProject));
-
-	return tsResult.js
-		.pipe($.sourcemaps.write('.'))
-		.pipe(gulp.dest('app/scripts/'));
 });
 
 gulp.task('images', () => {
@@ -64,11 +36,6 @@ gulp.task('images', () => {
 
 gulp.task('html', () => {
 	return gulp.src('app/*.html')
-		.pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
-		.pipe($.sourcemaps.init())
-		.pipe($.if('*.js', $.uglify()))
-		.pipe($.if('*.css', $.cleanCss({compatibility: '*'})))
-		.pipe($.sourcemaps.write())
 		.pipe($.if('*.html', $.minifyHtml({conditionals: true, loose: true})))
 		.pipe(gulp.dest('dist'));
 });

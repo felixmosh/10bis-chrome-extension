@@ -38,10 +38,6 @@ module.exports = {
 	plugins: [
 		new webpack.optimize.CommonsChunkPlugin({
 			name: ['popup', 'vendor', 'polyfills']
-		}),
-
-		new HtmlWebpackPlugin({
-			template: './app/popup.html'
 		})
 	]
 };

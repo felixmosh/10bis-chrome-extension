@@ -86,6 +86,7 @@ section {
 	padding: 5px 10px 10px 10px;
 	text-align: center;
 	overflow: hidden;
+	transition: background-color 150ms ease-in-out;
 
 	&:first-child {
 		margin-left: 9px;
