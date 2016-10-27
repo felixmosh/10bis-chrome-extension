@@ -51,38 +51,26 @@ gulp.task('chromeManifest', () => {
 				]
 			}
 		}))
-		.pipe($.if('*.css', $.cleanCss({compatibility: '*'})))
-		.pipe($.if('*.js', $.sourcemaps.init()))
-		.pipe($.if('*.js', $.uglify()))
-		.pipe($.if('*.js', $.sourcemaps.write('.')))
 		.pipe(gulp.dest('dist'));
 });
 
-gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
-
-gulp.task('watch', ['compile-ts', 'html'], () => {
-	$.livereload.listen();
-
-	gulp.watch([
-		'app/*.html',
-		'app/scripts/**/*.js',
-		'app/scripts/**/*.ts',
-		'app/images/**/*',
-		'app/styles/**/*',
-		'app/_locales/**/*.json'
-	]).on('change', $.livereload.reload);
-
-	gulp.watch('app/scripts/**/*.ts', ['compile-ts']);
-});
+gulp.task('clean', del.bind(null, ['dist']));
 
 gulp.task('size', () => {
 	return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 
+gulp.task('cleanLocalhost', function(){
+	gulp.src(['dist/*.html', 'dist/manifest.json'])
+		.pipe($.replace(' http://localhost:8080', ''))
+		.pipe($.replace('http://localhost:8080/', ''))
+		.pipe(gulp.dest('dist/'));
+});
+
 gulp.task('package', function () {
 	var manifest = require('./dist/manifest.json');
 	return gulp.src('dist/**')
-		.pipe($.zip('extv2-' + manifest.version + '.zip'))
+		.pipe($.zip('tenbis-' + manifest.version + '.zip'))
 		.pipe(gulp.dest('package'));
 });
 
@@ -90,6 +78,7 @@ gulp.task('build', ['clean'], (cb) => {
 	runSequence(
 		'chromeManifest',
 		['html', 'images', 'extras'],
+		'cleanLocalhost',
 		'size', cb);
 });
 
