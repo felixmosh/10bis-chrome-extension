@@ -4,7 +4,8 @@
 	"scripts": {
 		"start": "webpack-dev-server --hot --inline --progress --port 8080",
 		"test": "karma start",
-		"build": "gulp build && webpack --config config/webpack.prod.js --progress --profile --bail"
+		"build": "gulp build && webpack --config config/webpack.prod.js --progress --profile --bail",
+		"package": "npm run build && gulp package"
 	},
 	"dependencies": {
 		"@angular/common": "~2.4.7",
