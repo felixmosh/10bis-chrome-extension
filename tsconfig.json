@@ -1,4 +1,6 @@
 {
+	"compileOnSave": false,
+	"buildOnSave": false,
 	"compilerOptions": {
 		"target": "es5",
 		"module": "es2015",
@@ -9,6 +11,14 @@
 		"removeComments": false,
 		"noImplicitAny": false,
 		"suppressImplicitAnyIndexErrors": true
+	},
+	"awesomeTypescriptLoaderOptions": {
+		"forkChecker": true,
+		"useWebpackText": true
+	},
+	"angularCompilerOptions": {
+		"genDir": "./compiled",
+		"skipMetadataEmit": true
 	},
 	"include":[
 		"app/typings/app.d.ts"

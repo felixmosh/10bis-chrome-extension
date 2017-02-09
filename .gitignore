@@ -9,3 +9,4 @@ test/bower_components
 package
 app/scripts/**/*.js
 app/scripts/**/*.js.map
+npm-debug*.log
