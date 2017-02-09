@@ -1,36 +1,37 @@
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var helpers = require('./helpers');
+const webpack = require('webpack');
+const helpers = require('./helpers');
 
 module.exports = {
 	entry: {
-		'polyfills': './app/scripts/polyfills.ts',
-		'vendor': './app/scripts/vendor.ts',
-		'popup': './app/scripts/popup.ts'
+		'scripts/polyfills': './app/scripts/polyfills.ts',
+		'scripts/vendor': './app/scripts/vendor.ts',
+		'scripts/popup': './app/scripts/popup.ts'
 	},
 
 	resolve: {
-		extensions: ['', '.js', '.ts']
+		extensions: ['.js', '.ts']
 	},
 
 	module: {
-		loaders: [
+		rules: [
 			{
 				test: /\.ts$/,
-				loaders: ['ts', 'angular2-template-loader']
+				use: ['awesome-typescript-loader', 'angular2-template-loader']
 			},
 			{
 				test: /\.html$/,
-				loader: 'html'
+				use: ['html-loader']
 			},
 			{
 				test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
-				loader: 'file?name=assets/[name].[hash].[ext]'
+				use: [{
+					loader: 'file-loader',
+					options: {'name': 'assets/[name].[hash].[ext]'}
+				}]
 			},
 			{
 				test: /\.scss$/,
-				loaders: ['style', 'css', 'sass?sourceMap']
+				use: ['style-loader', 'css-loader', 'sass-loader']
 			}
 		]
 	},
