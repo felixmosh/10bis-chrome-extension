@@ -3,9 +3,9 @@ const helpers = require('./helpers');
 
 module.exports = {
 	entry: {
+		'scripts/popup': './app/scripts/popup.ts',
 		'scripts/polyfills': './app/scripts/polyfills.ts',
-		'scripts/vendor': './app/scripts/vendor.ts',
-		'scripts/popup': './app/scripts/popup.ts'
+		'scripts/vendor': './app/scripts/vendor.ts'
 	},
 
 	resolve: {
@@ -38,7 +38,13 @@ module.exports = {
 
 	plugins: [
 		new webpack.optimize.CommonsChunkPlugin({
-			name: ['popup', 'vendor', 'polyfills']
-		})
+			name: ['scripts/popup', 'scripts/vendor', 'scripts/polyfills']
+		}),
+		new webpack.ContextReplacementPlugin(
+			// The (\\|\/) piece accounts for path separators in *nix and Windows
+			/angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+			helpers.root('./src'), // location of your src
+			{} // a map of your routes
+		)
 	]
 };

@@ -1,14 +1,10 @@
 import {Component, OnInit, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {Highcharts} from 'angular2-highcharts';
-Highcharts.setOptions({
-	lang: {
-		weekdays: ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת']
-	}
-});
+import {HighchartsService} from 'angular2-highcharts/dist/HighchartsService';
 
 @Component({
 	selector: 'detailed-charges',
-	templateUrl: './detailed-charges.html'
+	templateUrl: './detailed-charges.html',
+	providers: [HighchartsService]
 })
 export class DetailedChargersComponent implements OnInit, OnChanges {
 	public options;
@@ -16,10 +12,16 @@ export class DetailedChargersComponent implements OnInit, OnChanges {
 	@Input() stats: ITB.Stats;
 	private chart;
 
-	constructor() {
+	constructor(public highchartsService: HighchartsService) {
+		this.highchartsService.Highcharts.setOptions({
+			lang: {
+				weekdays: ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת']
+			}
+		})
 	}
 
 	public ngOnInit() {
+		const _this = this;
 		this.options = {
 			chart: {
 				type: 'column'
@@ -27,13 +29,14 @@ export class DetailedChargersComponent implements OnInit, OnChanges {
 			tooltip: {
 				useHTML: true,
 				formatter: function () {
-					var hasManyRestaurants = this.point.expenses.length > 1;
-					var restaurantsList = this.point.expenses.map(function (item) {
-						return item.restaurant + ((hasManyRestaurants) ? ` - ${item.amount} &#8362;` : '');
-					}).join('<br />');
+					const hasManyRestaurants = this.point.expenses.length > 1;
+					const restaurantsList = this.point.expenses
+						.map((item) => {
+							return item.restaurant + ((hasManyRestaurants) ? ` - ${item.amount} &#8362;` : '');
+						}).join('<br />');
 					return `<div class="tooltip-content">
 						${restaurantsList}<br />
-						<span>${Highcharts.dateFormat('יום %A, %d/%m', this.point.x)}</span>
+						<span>${_this.highchartsService.Highcharts.dateFormat('יום %A, %d/%m', this.point.x)}</span>
 						<strong>${this.series.name}: ${this.point.y} &#8362;</strong></div>`;
 				}
 			},

@@ -1,7 +1,7 @@
 import {NgModule, LOCALE_ID}      from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {HttpModule} from '@angular/http';
-import { CHART_DIRECTIVES } from 'angular2-highcharts';
+import {ChartModule} from 'angular2-highcharts';
 import {TenBisComponent}  from './components/ten-bis/ten-bis';
 import {MonthlyStatsComponent}  from './components/monthly-stats/monthly-stats';
 import {BalanceComponent}  from './components/monthly-stats/balance/balance';
@@ -12,10 +12,10 @@ import {MonthNavigatorComponent} from './components/monthly-stats/month-navigato
 @NgModule({
 	imports: [
 		BrowserModule,
-		HttpModule
+		HttpModule,
+		ChartModule
 	],
 	declarations: [
-		CHART_DIRECTIVES,
 		TenBisComponent,
 		MonthlyStatsComponent,
 		BalanceComponent,

@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "es5",
-		"module": "commonjs",
+		"module": "es2015",
 		"moduleResolution": "node",
 		"sourceMap": true,
 		"emitDecoratorMetadata": true,
@@ -9,5 +9,11 @@
 		"removeComments": false,
 		"noImplicitAny": false,
 		"suppressImplicitAnyIndexErrors": true
-	}
+	},
+	"include":[
+		"app/typings/app.d.ts"
+	],
+	"files": [
+		"app/scripts/popup.ts"
+	]
 }
