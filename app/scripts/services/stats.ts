@@ -1,17 +1,17 @@
 import {Injectable, Inject} from '@angular/core';
 import {URLSearchParams} from '@angular/http';
 import {Http, Response} from '@angular/http';
-import {Observable, BehaviorSubject} from 'rxjs/Rx';
+import {Observable, ReplaySubject} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import {ExpensesCalculatorService} from './expenses-calculator';
 
 
 @Injectable()
 export class StatsService {
-	private stats: BehaviorSubject<ITB.Stats>;
+	private stats: ReplaySubject<ITB.Stats>;
 
 	constructor(@Inject('Configs') private Configs, private http: Http, private expensesCalculator: ExpensesCalculatorService) {
-		this.stats = new BehaviorSubject(<any>{});
+		this.stats = new ReplaySubject(1);
 	}
 
 	public getData(userId: string, monthBias = 0): Observable<ITB.Stats> {

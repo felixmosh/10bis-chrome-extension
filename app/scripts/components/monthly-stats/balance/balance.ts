@@ -4,17 +4,13 @@ import {Component, OnInit, Input, OnChanges, SimpleChanges} from '@angular/core'
 	selector: 'balance',
 	templateUrl: './balance.html'
 })
-export class BalanceComponent implements OnInit, OnChanges {
+export class BalanceComponent implements OnChanges {
 	public options;
 	public isLoaded: boolean = false;
 	@Input() stats: ITB.Stats;
 	private chart;
 
 	constructor() {
-		this.ngOnInit();
-	}
-
-	public ngOnInit() {
 		this.options = {
 			chart: {type: 'bar'},
 			plotOptions: {series: {stacking: 'normal'}},

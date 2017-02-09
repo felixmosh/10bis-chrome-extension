@@ -6,7 +6,7 @@ import {HighchartsService} from 'angular2-highcharts/dist/HighchartsService';
 	templateUrl: './detailed-charges.html',
 	providers: [HighchartsService]
 })
-export class DetailedChargersComponent implements OnInit, OnChanges {
+export class DetailedChargersComponent implements OnChanges {
 	public options;
 	public isLoaded: boolean = false;
 	@Input() stats: ITB.Stats;
@@ -17,10 +17,8 @@ export class DetailedChargersComponent implements OnInit, OnChanges {
 			lang: {
 				weekdays: ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת']
 			}
-		})
-	}
+		});
 
-	public ngOnInit() {
 		const _this = this;
 		this.options = {
 			chart: {
@@ -81,7 +79,7 @@ export class DetailedChargersComponent implements OnInit, OnChanges {
 	}
 
 	public ngOnChanges(changes: SimpleChanges) {
-		if (typeof changes['stats'].currentValue.coveredByCompany !== 'undefined') {
+		if (typeof changes['stats'].currentValue.coveredByCompany !== 'undefined' && this.options) {
 			this.prepareChartData(changes['stats'].currentValue);
 		}
 	}
@@ -92,11 +90,11 @@ export class DetailedChargersComponent implements OnInit, OnChanges {
 
 	private prepareChartData(stats: ITB.Stats) {
 		this.options.series[0].data.length = 0;
-		var lastDay = -1;
+		let lastDay = -1;
 		stats.transactions.forEach((transaction) => {
 			// Join expenses from the same day
 			if (lastDay === transaction.date.getDate()) {
-				var lastEntry = this.options.series[0].data[this.options.series[0].data.length - 1];
+				const lastEntry = this.options.series[0].data[this.options.series[0].data.length - 1];
 				lastEntry.y += transaction.amount;
 				lastEntry.expenses.push({
 					amount: transaction.amount,
