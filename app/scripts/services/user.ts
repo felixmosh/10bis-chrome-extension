@@ -4,6 +4,7 @@ import {Http, Response} from '@angular/http';
 import {ChromeService} from './chrome';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
+import {MyQueryEncoder} from './query-encoder';
 
 
 @Injectable()
@@ -20,7 +21,7 @@ export class UserService {
 	public getUserData(userId: string): Promise<ITB.User> {
 
 		if (!this.user) {
-			let search: URLSearchParams = new URLSearchParams();
+			let search: URLSearchParams = new URLSearchParams('', new MyQueryEncoder());
 			search.set('encryptedUserId', userId);
 			search.set('shoppingCartGuid', '');
 			search.set('WebsiteId', '10bis');

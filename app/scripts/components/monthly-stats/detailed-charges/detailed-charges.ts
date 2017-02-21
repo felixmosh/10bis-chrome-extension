@@ -48,7 +48,7 @@ export class DetailedChargersComponent implements OnChanges {
 			}],
 			xAxis: {
 				type: 'datetime',
-				tickInterval: 24 * 3600 * 1000,
+				tickInterval: 2 * 24 * 3600 * 1000,
 				dateTimeLabelFormats: {
 					day: '%d/%m'
 				},

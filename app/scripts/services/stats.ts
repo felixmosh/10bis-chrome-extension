@@ -4,6 +4,7 @@ import {Http, Response} from '@angular/http';
 import {Observable, ReplaySubject} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import {ExpensesCalculatorService} from './expenses-calculator';
+import {MyQueryEncoder} from './query-encoder';
 
 
 @Injectable()
@@ -15,7 +16,7 @@ export class StatsService {
 	}
 
 	public getData(userId: string, monthBias = 0): Observable<ITB.Stats> {
-		let search: URLSearchParams = new URLSearchParams();
+		let search: URLSearchParams = new URLSearchParams('', new MyQueryEncoder());
 		search.set('encryptedUserId', userId);
 		search.set('dateBias', `${monthBias}`);
 		search.set('WebsiteId', '10bis');
