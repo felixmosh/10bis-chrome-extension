@@ -29,7 +29,8 @@ export class ExpensesCalculatorService {
 				stats.remainingForToday = Math.min(100, stats.remainingForToday);
 			}
 
-			stats.avgTillEndOfTheMonth = (stats.totalCoveredByCompany - stats.monthlyUsed) / (this.monthlyWorkingDays - this.workingDaysTillToday);
+			const remainingWorkingDays = this.monthlyWorkingDays - this.workingDaysTillToday;
+			stats.avgTillEndOfTheMonth = remainingWorkingDays > 0 ? (stats.totalCoveredByCompany - stats.monthlyUsed) / remainingWorkingDays : 0;
 			stats.avgTillEndOfTheMonth = Math.max(0, parseFloat(stats.avgTillEndOfTheMonth.toFixed(2)));
 		} else {
 			stats.remainingForToday = 0;
