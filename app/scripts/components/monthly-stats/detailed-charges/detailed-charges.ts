@@ -1,10 +1,15 @@
-import {Component, OnInit, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {HighchartsService} from 'angular2-highcharts/dist/HighchartsService';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import * as Highcharts from 'highcharts';
+
+Highcharts.setOptions({
+	lang: {
+		weekdays: ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת']
+	}
+});
 
 @Component({
 	selector: 'detailed-charges',
-	templateUrl: './detailed-charges.html',
-	providers: [HighchartsService]
+	templateUrl: './detailed-charges.html'
 })
 export class DetailedChargersComponent implements OnChanges {
 	public options;
@@ -12,14 +17,7 @@ export class DetailedChargersComponent implements OnChanges {
 	@Input() stats: ITB.Stats;
 	private chart;
 
-	constructor(public highchartsService: HighchartsService) {
-		this.highchartsService.Highcharts.setOptions({
-			lang: {
-				weekdays: ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת']
-			}
-		});
-
-		const _this = this;
+	constructor() {
 		this.options = {
 			chart: {
 				type: 'column'
@@ -34,7 +32,7 @@ export class DetailedChargersComponent implements OnChanges {
 						}).join('<br />');
 					return `<div class="tooltip-content">
 						${restaurantsList}<br />
-						<span>${_this.highchartsService.Highcharts.dateFormat('יום %A, %d/%m', this.point.x)}</span>
+						<span>${Highcharts.dateFormat('יום %A, %d/%m', this.point.x)}</span>
 						<strong>${this.series.name}: ${this.point.y} &#8362;</strong></div>`;
 				}
 			},

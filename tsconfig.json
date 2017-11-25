@@ -5,6 +5,7 @@
 		"target": "es5",
 		"module": "es2015",
 		"moduleResolution": "node",
+		"lib": ["es6", "dom"],
 		"sourceMap": true,
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
