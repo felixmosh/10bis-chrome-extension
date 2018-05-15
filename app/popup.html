@@ -21,18 +21,7 @@
 					{{vm.data.user.firstName}} {{vm.data.user.lastName}}</h1>
 			</header>
 			<main ng-if="vm.isLoaded">
-				<div class="half-block"
-					 ng-class="{'green': vm.data.remainingForToday >= vm.data.dailyCompanyLimit, 'gray': vm.data.remainingForToday < vm.data.dailyCompanyLimit}">
-					<h3>
-						יתרתך להיום:
-					</h3>
-					<h4>{{vm.data.remainingForToday | currency}}</h4>
-					<h5>
-						הגבלה יומית:
-						{{vm.data.dailyCompanyLimit | currency}}</h5>
-				</div>
-				<div class="half-block"
-					 ng-class="{'green': vm.data.avgTillEndOfTheMonth >= vm.data.dailyCompanyLimit, 'red': vm.data.avgTillEndOfTheMonth < vm.data.dailyCompanyLimit}">
+				<div class="full-block green">
 					<h3>
 						סבסוד יומי:
 					</h3>

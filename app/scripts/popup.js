@@ -2,7 +2,7 @@
 /*global Highcharts*/
 
 (function () {
-	var baseUrl = 'http://www.10bis.co.il';
+	var baseUrl = 'https://www.10bis.co.il';
 	var app = angular.module('10BisApp', ['highcharts-ng']);
 
 	app.controller('mainCtrl', ['dataService', 'calculatorService', 'chartsService', function (dataService, calculatorService, chartsService) {
@@ -140,69 +140,41 @@
 				}
 				lastDay = transaction.date.getDate();
 			});
-			this.monthlyChartConfig.yAxis.plotLines[0].value = data.dailyCompanyLimit;
 			this.monthlyChartConfig.loading = false;
 
 			return this.monthlyChartConfig;
 		};
 
 		this.prepareTotalsChart = function (data) {
-			if (data.monthlyUsed > data.totalCoveredByCompany) {
+			if (data.monthlyUsed > data.monthlyLimit) {
 				this.totalsChartConfig.series.push({
-					data: [data.totalCoveredByCompany],
-					name: 'מסובסד',
-					color: 'green'
+					data: [data.monthlyUsed - data.monthlyLimit],
+					name: 'חריגה',
+					color: 'red'
 				});
 
 				this.totalsChartConfig.series.push({
-					data: [data.monthlyUsed - data.totalCoveredByCompany],
-					name: 'חריגה',
-					color: 'red'
+					data: [data.monthlyLimit],
+					name: 'מסובסד',
+					color: 'blue'
 				});
 
 				this.totalsChartConfig.yAxis.max = data.monthlyUsed;
 			}
 			else {
-				if (data.monthlyUsed > data.coveredByCompany) {
-					this.totalsChartConfig.series.push({
-						data: [data.coveredByCompany],
-						name: 'מסובסד',
-						color: 'green'
-					});
+				this.totalsChartConfig.series.push({
+					data: [data.monthlyBalance],
+					name: 'יתרה',
+					color: 'lightgray'
+				});
+				
+				this.totalsChartConfig.series.push({
+					data: [data.monthlyLimit],
+					name: 'מסובסד',
+					color: 'blue'
+				});
 
-					this.totalsChartConfig.series.push({
-						data: [data.monthlyUsed - data.coveredByCompany],
-						name: 'חריגה',
-						color: 'red'
-					});
-
-					this.totalsChartConfig.series.push({
-						data: [data.totalCoveredByCompany - data.monthlyUsed],
-						name: 'יתרה',
-						color: 'lightgray'
-					});
-				}
-				else {
-					this.totalsChartConfig.series.push({
-						data: [data.monthlyUsed],
-						name: 'שימוש חודשי',
-						color: 'lightgreen'
-					});
-
-					this.totalsChartConfig.series.push({
-						data: [data.coveredByCompany - data.monthlyUsed],
-						name: 'יתרה יומית',
-						color: 'green'
-					});
-
-					this.totalsChartConfig.series.push({
-						data: [data.totalCoveredByCompany - data.coveredByCompany],
-						name: 'יתרה',
-						color: 'lightgray'
-					});
-				}
-
-				this.totalsChartConfig.yAxis.max = data.totalCoveredByCompany;
+				this.totalsChartConfig.yAxis.max = data.monthlyLimit;
 			}
 			this.totalsChartConfig.loading = false;
 
@@ -240,18 +212,16 @@
 			if (wasTransactionToday) {
 				this.workingDaysTillToday++;
 			}
-			data.coveredByCompany = data.dailyCompanyLimit * this.workingDaysTillToday;
-			data.totalCoveredByCompany = this.monthlyWorkingDays * data.dailyCompanyLimit;
-			data.onMe = Math.max(0, data.monthlyUsed - data.coveredByCompany);
 
-			if (data.onMe > 0) {
-				data.remainingForToday = ((wasTransactionToday || !isWorkingDay(today)) ? 0 : data.dailyCompanyLimit);
+			var onMe = data.monthlyUsed - data.monthlyLimit;
+			if (onMe > 0) {
+				data.remainingForToday = ((wasTransactionToday || !isWorkingDay(today)) ? 0 : data.dailyLimit);
 			}
 			else {
-				data.remainingForToday = Math.min(data.coveredByCompany - data.monthlyUsed + ((!wasTransactionToday) ? data.dailyCompanyLimit : 0), 100);
+				data.remainingForToday = Math.min(data.monthlyLimit - data.monthlyUsed + ((!wasTransactionToday) ? data.dailyLimit : 0), 100);
 			}
 
-			data.avgTillEndOfTheMonth = Math.max(0, (data.totalCoveredByCompany - data.monthlyUsed) / (this.monthlyWorkingDays - this.workingDaysTillToday));
+			data.avgTillEndOfTheMonth = Math.max(0, data.monthlyBalance / (this.monthlyWorkingDays - this.workingDaysTillToday));
 
 			return data;
 		};
@@ -358,9 +328,13 @@
 			};
 			queryParams = toQueryString(queryParams);
 			return $http.get(baseUrl + '/api/UserTransactionsReport?' + queryParams).then(function (response) {
+				var card = response.data.Moneycards[0];
 				return {
-					monthlyUsed: response.data.Moneycards[0].MonthlyUsage,
-					dailyCompanyLimit: 35,
+					monthlyUsed: card.MonthlyUsage,
+					dailyLimit: card.DailyLimit,
+					monthlyLimit: card.MonthlyLimit,
+					monthlyBalance: card.MonthlyBalance,
+					monthlyUsage: card.MonthlyUsage,
 					transactions: response.data.Transactions.filter(function (transaction) {
 						return transaction.PaymentMethod === 'Moneycard';
 					}).map(function (transaction) {

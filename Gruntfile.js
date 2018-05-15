@@ -156,29 +156,6 @@ module.exports = function (grunt) {
 			css: ['<%= config.dist %>/styles/{,*/}*.css']
 		},
 
-		// The following *-min tasks produce minifies files in the dist folder
-		imagemin: {
-			dist: {
-				files: [{
-					expand: true,
-					cwd: '<%= config.app %>/images',
-					src: '{,*/}*.{gif,jpeg,jpg,png}',
-					dest: '<%= config.dist %>/images'
-				}]
-			}
-		},
-
-		svgmin: {
-			dist: {
-				files: [{
-					expand: true,
-					cwd: '<%= config.app %>/images',
-					src: '{,*/}*.svg',
-					dest: '<%= config.dist %>/images'
-				}]
-			}
-		},
-
 		htmlmin: {
 			dist: {
 				options: {
@@ -235,7 +212,7 @@ module.exports = function (grunt) {
 					dest: '<%= config.dist %>',
 					src: [
 						'*.{ico,png,txt}',
-						'images/{,*/}*.{webp,gif}',
+						'images/{,*/}*.{png,webp,gif}',
 						'{,*/}*.html',
 						'styles/{,*/}*.css',
 						'styles/fonts/{,*/}*.*',
@@ -248,10 +225,7 @@ module.exports = function (grunt) {
 		// Run some tasks in parallel to speed up build process
 		concurrent: {
 			chrome: [],
-			dist: [
-				'imagemin',
-				'svgmin'
-			],
+			dist: [],
 			test: []
 		},
 
@@ -294,7 +268,6 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('debug', function () {
 		grunt.task.run([
-			'jshint',
 			'concurrent:chrome',
 			'connect:chrome',
 			'watch'
