@@ -99,6 +99,7 @@ const options = {
       : []),
     // clean the build folder
     new CleanWebpackPlugin({
+      cleanStaleWebpackAssets: false,
       cleanOnceBeforeBuildPatterns: ['build']
     }),
     // expose and write the allowed env vars on the compiled bundle
