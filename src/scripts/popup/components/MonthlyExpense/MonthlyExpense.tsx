@@ -1,21 +1,21 @@
 import { h } from 'preact';
 import {
-  BarChart,
   Bar,
-  XAxis,
-  YAxis,
+  BarChart,
   CartesianGrid,
-  Tooltip,
+  ReferenceLine,
   ResponsiveContainer,
-  ReferenceLine
+  Tooltip,
+  XAxis,
+  YAxis
 } from 'precharts';
+import { IOrder } from '../../../../types/types';
 import {
   formatPrice,
   getDateKey,
   IStatsState
 } from '../../store/reducers/stats-reducer';
 import { TooltipContent } from '../TooltipContent/TooltipContent';
-import { IOrder } from '../../../../types/types';
 
 export const MonthlyExpense = ({ stats }: { stats: IStatsState }) => {
   const data = stats.orders.map((stat) => ({

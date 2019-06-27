@@ -1,4 +1,4 @@
-import { IOrder, IUserDetails } from '../../../types/types';
+import { IUserDateResponse, IUserDetails } from '../../../types/types';
 import { BASE_URL, COOKIE_NAME } from '../../constants/constants';
 import { chromeService } from './chrome';
 
@@ -23,10 +23,6 @@ interface ITenBisStatsData {
   }>;
 }
 
-function convert10BisDateToDate(date: string): Date {
-  return new Date(parseInt(date.slice(6, -2), 10));
-}
-
 class TenBisApi {
   public async login(): Promise<IUserDetails> {
     const userId = await chromeService.getCookie(COOKIE_NAME, BASE_URL);
@@ -44,15 +40,15 @@ class TenBisApi {
   public getUserData(
     userId: string,
     monthBias: number
-  ): Promise<{ orders: IOrder[]; monthlyLimit: number }> {
+  ): Promise<IUserDateResponse> {
     return this.get<ITenBisStatsData>('/UserTransactionsReport', {
       encryptedUserId: userId,
       dateBias: monthBias
     }).then((response) => ({
       orders: response.Transactions.map((order) => ({
-        date: convert10BisDateToDate(order.TransactionDate),
+        date: order.TransactionDate.slice(6, -2),
         price: order.TransactionAmount,
-        restaurantName: order.ResName
+        restaurantName: order.ResName.trim()
       })),
       monthlyLimit: response.Moneycards.length
         ? response.Moneycards[0].MonthlyLimit

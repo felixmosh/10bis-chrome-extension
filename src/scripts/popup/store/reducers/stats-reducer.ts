@@ -26,9 +26,14 @@ export function statsReducer(
 ) {
   switch (action.type) {
     case StatsActions.SAVE_USER_DATA:
+      const orders: IOrder[] = action.value.orders.map((o) => ({
+        ...o,
+        date: new Date(parseInt(o.date, 10))
+      }));
+
       return {
         ...state,
-        orders: calculateOrders(action.value.orders, state),
+        orders: calculateOrders(orders, state),
         totalExpense: calculateTotalExpense(action.value.orders),
         coveredByCompany: action.value.monthlyLimit
       };

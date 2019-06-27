@@ -28,6 +28,17 @@ export class ChromeService {
       });
     });
   }
+
+  public async mergeItem(key: string, obj: object): Promise<void> {
+    let data;
+    try {
+      data = await this.getItem(key);
+    } catch (e) {
+      data = {};
+    }
+
+    return this.setItem(key, { ...data, ...obj });
+  }
 }
 
 export const chromeService = new ChromeService();

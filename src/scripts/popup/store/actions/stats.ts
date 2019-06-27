@@ -1,12 +1,17 @@
-import { IAppState, IOrder, IUserDetails } from '../../../../types/types';
+import {
+  IAppState,
+  IUserDateResponse,
+  IUserDetails
+} from '../../../../types/types';
 import { tenBisApi } from '../../services/api';
+import { chromeService } from '../../services/chrome';
 
 export const StatsActions = {
   SAVE_USER_DATA: 'save_user_data',
   UPDATE_MONTH_BY: 'update_month_by'
 };
 
-function saveUserData(data: { orders: IOrder[]; monthlyLimit: number }) {
+function saveUserData(data: IUserDateResponse) {
   return {
     type: StatsActions.SAVE_USER_DATA,
     value: data
@@ -20,11 +25,31 @@ function updateMonthBy(monthBias: number) {
   };
 }
 
+const RAW_DATA = 'rawData';
+
 export function getStats(bias: number, user: IUserDetails) {
-  return (dispatch) => {
-    tenBisApi.getUserData(user.id, bias).then((response) => {
+  return async (dispatch) => {
+    let data: IUserDateResponse = null;
+    try {
+      const storedData = await chromeService.getItem<IUserDateResponse>(
+        RAW_DATA
+      );
+      data = storedData[bias];
+      dispatch(saveUserData(data));
+    } catch (e) {
+      //
+    }
+
+    if (bias < 0 && data) {
+      return;
+    }
+
+    const response = await tenBisApi.getUserData(user.id, bias);
+
+    if (!data || (data && data.orders.length < response.orders.length)) {
       dispatch(saveUserData(response));
-    });
+      await chromeService.mergeItem(RAW_DATA, { [bias]: response });
+    }
   };
 }
 
