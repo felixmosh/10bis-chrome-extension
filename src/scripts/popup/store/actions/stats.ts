@@ -2,14 +2,14 @@ import { IAppState, IOrder, IUserDetails } from '../../../../types/types';
 import { tenBisApi } from '../../services/api';
 
 export const StatsActions = {
-  SAVE_ORDERS: 'save_orders',
+  SAVE_USER_DATA: 'save_user_data',
   UPDATE_MONTH_BY: 'update_month_by'
 };
 
-function saveOrders(orders: IOrder[]) {
+function saveUserData(data: { orders: IOrder[]; monthlyLimit: number }) {
   return {
-    type: StatsActions.SAVE_ORDERS,
-    value: orders
+    type: StatsActions.SAVE_USER_DATA,
+    value: data
   };
 }
 
@@ -22,8 +22,8 @@ function updateMonthBy(monthBias: number) {
 
 export function getStats(bias: number, user: IUserDetails) {
   return (dispatch) => {
-    tenBisApi.getUserOrders(user.id, bias).then((response) => {
-      dispatch(saveOrders(response.orders));
+    tenBisApi.getUserData(user.id, bias).then((response) => {
+      dispatch(saveUserData(response));
     });
   };
 }

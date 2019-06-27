@@ -16,7 +16,7 @@ const initialState: IStatsState = {
   toDate: getLastDayOfMonth(today),
   monthBias: 0,
   orders: [],
-  coveredByCompany: 800,
+  coveredByCompany: 0,
   totalExpense: 0
 };
 
@@ -25,11 +25,12 @@ export function statsReducer(
   action: IAction
 ) {
   switch (action.type) {
-    case StatsActions.SAVE_ORDERS:
+    case StatsActions.SAVE_USER_DATA:
       return {
         ...state,
-        orders: calculateOrders(action.value, state),
-        totalExpense: calculateTotalExpense(action.value)
+        orders: calculateOrders(action.value.orders, state),
+        totalExpense: calculateTotalExpense(action.value.orders),
+        coveredByCompany: action.value.monthlyLimit
       };
     case StatsActions.UPDATE_MONTH_BY:
       const newDate = new Date(

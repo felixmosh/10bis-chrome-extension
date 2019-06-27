@@ -17,6 +17,10 @@ interface ITenBisStatsData {
     TransactionAmount: number;
     ResName: string;
   }>;
+  Moneycards: Array<{
+    DailyLimit: number;
+    MonthlyLimit: number;
+  }>;
 }
 
 function convert10BisDateToDate(date: string): Date {
@@ -37,10 +41,10 @@ class TenBisApi {
     }));
   }
 
-  public getUserOrders(
+  public getUserData(
     userId: string,
     monthBias: number
-  ): Promise<{ orders: IOrder[] }> {
+  ): Promise<{ orders: IOrder[]; monthlyLimit: number }> {
     return this.get<ITenBisStatsData>('/UserTransactionsReport', {
       encryptedUserId: userId,
       dateBias: monthBias
@@ -49,7 +53,10 @@ class TenBisApi {
         date: convert10BisDateToDate(order.TransactionDate),
         price: order.TransactionAmount,
         restaurantName: order.ResName
-      }))
+      })),
+      monthlyLimit: response.Moneycards.length
+        ? response.Moneycards[0].MonthlyLimit
+        : 800
     }));
   }
 
