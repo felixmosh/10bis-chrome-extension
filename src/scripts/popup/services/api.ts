@@ -48,9 +48,7 @@ class TenBisApi {
       orders: response.Transactions.map((order) => ({
         date: convert10BisDateToDate(order.TransactionDate),
         price: order.TransactionAmount,
-        restaurantName: order.ResName.startsWith('ציקן')
-          ? 'ציקן סטיישן'
-          : order.ResName
+        restaurantName: order.ResName
       }))
     }));
   }
