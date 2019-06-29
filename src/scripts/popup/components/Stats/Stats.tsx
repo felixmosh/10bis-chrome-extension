@@ -16,7 +16,7 @@ export class Stats extends Component<IStatsProps> {
   }
 
   public render() {
-    const { stats } = this.props;
+    const { stats, options } = this.props;
     return (
       <div>
         <MonthNavigation
@@ -25,7 +25,7 @@ export class Stats extends Component<IStatsProps> {
           onClickNext={this.onClickNext}
         />
         <Balance stats={stats} />
-        <MonthlyExpense stats={stats} />
+        <MonthlyExpense stats={stats} options={options} />
       </div>
     );
   }

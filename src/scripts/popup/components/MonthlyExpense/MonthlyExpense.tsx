@@ -10,6 +10,7 @@ import {
   YAxis
 } from 'precharts';
 import { IOrder } from '../../../../types/types';
+import { IOptionsState } from '../../store/reducers/options-reducer';
 import {
   formatPrice,
   getDateKey,
@@ -17,7 +18,13 @@ import {
 } from '../../store/reducers/stats-reducer';
 import { TooltipContent } from '../TooltipContent/TooltipContent';
 
-export const MonthlyExpense = ({ stats }: { stats: IStatsState }) => {
+export const MonthlyExpense = ({
+  stats,
+  options
+}: {
+  stats: IStatsState;
+  options: IOptionsState;
+}) => {
   const data = stats.orders.map((stat) => ({
     displayDate: getDateKey(stat.date),
     ...stat
@@ -61,7 +68,13 @@ export const MonthlyExpense = ({ stats }: { stats: IStatsState }) => {
               }
             }}
           />
-          <ReferenceLine y={35} stroke="red" strokeDasharray="3 3" />
+          {options.refLine && (
+            <ReferenceLine
+              y={options.refLine}
+              stroke="red"
+              strokeDasharray="3 3"
+            />
+          )}
           <Bar dataKey="total" fill="#748d97" unit="ILS" />
         </BarChart>
       </ResponsiveContainer>

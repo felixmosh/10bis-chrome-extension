@@ -1,4 +1,5 @@
 import { Dispatch } from 'redux';
+import { IOptionsState } from '../scripts/popup/store/reducers/options-reducer';
 import { IStatsState } from '../scripts/popup/store/reducers/stats-reducer';
 import { IUserState } from '../scripts/popup/store/reducers/user-reducer';
 
@@ -14,6 +15,7 @@ export interface IAction {
 export interface IAppState {
   user: IUserState;
   stats: IStatsState;
+  options: IOptionsState;
 }
 
 export interface IUserDetails {
@@ -44,4 +46,8 @@ export interface IRawOrder {
 export interface IUserDateResponse {
   orders: IRawOrder[];
   monthlyLimit: number;
+}
+
+export interface IOptions {
+  refLine: number;
 }

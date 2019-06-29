@@ -4,6 +4,7 @@ import { IAppState, IReduxProps } from '../../types/types';
 import * as styles from './App.scss';
 import { Header } from './components/Header/Header';
 import { Stats } from './components/Stats/Stats';
+import { loadOptions } from './store/actions/options';
 import { restoreLogin } from './store/actions/user';
 
 interface IAppProps extends IReduxProps, Partial<IAppState> {}
@@ -12,6 +13,7 @@ interface IAppProps extends IReduxProps, Partial<IAppState> {}
 export class App extends Component<IAppProps, {}> {
   public componentWillMount() {
     const { dispatch } = this.props;
+    dispatch(loadOptions());
     dispatch(restoreLogin());
   }
 

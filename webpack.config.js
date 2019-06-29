@@ -32,7 +32,7 @@ if (fileSystem.existsSync(secretsPath)) {
 const options = {
   entry: {
     popup: path.join(__dirname, 'src', 'scripts', 'popup.entry.tsx'),
-    options: path.join(__dirname, 'src', 'scripts', 'options.js'),
+    options: path.join(__dirname, 'src', 'scripts', 'options.entry.tsx'),
     background: path.join(__dirname, 'src', 'scripts', 'background.js')
   },
   output: {

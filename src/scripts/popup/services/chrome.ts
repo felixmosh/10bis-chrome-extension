@@ -39,6 +39,18 @@ export class ChromeService {
 
     return this.setItem(key, { ...data, ...obj });
   }
+
+  public setSyncItem<T extends {}>(items: T) {
+    return new Promise<void>((resolve) => {
+      chrome.storage.sync.set(items, resolve);
+    });
+  }
+
+  public getSyncItem<T extends {}>(): Promise<T> {
+    return new Promise<T>((resolve) => {
+      chrome.storage.sync.get(resolve);
+    });
+  }
 }
 
 export const chromeService = new ChromeService();
