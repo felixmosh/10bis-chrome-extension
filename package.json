@@ -1,6 +1,6 @@
 {
   "name": "10bis-chrome-extension",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "A Chrome extension to manage your 10Bis expenses.",
   "scripts": {
     "build": "NODE_ENV=production webpack --mode production",
