@@ -1,8 +1,4 @@
-import {
-  IAppState,
-  IUserDateResponse,
-  IUserDetails
-} from '../../../../types/types';
+import { IAppState, IUserDateResponse, IUserDetails } from '../../../../types/types';
 import { tenBisApi } from '../../services/api';
 import { chromeService } from '../../services/chrome';
 
@@ -27,15 +23,25 @@ function updateMonthBy(monthBias: number) {
 
 const RAW_DATA = 'rawData';
 
+function getCacheKey(bias: number) {
+  const today = new Date();
+  today.setMonth(today.getMonth() + bias);
+  return `${today.getMonth() + 1}-${today.getFullYear()}`;
+}
+
 export function getStats(bias: number, user: IUserDetails) {
   return async (dispatch) => {
+    const cacheKey = getCacheKey(bias);
+
     let data: IUserDateResponse = null;
     try {
       const storedData = await chromeService.getItem<IUserDateResponse>(
         RAW_DATA
       );
-      data = storedData[bias];
-      dispatch(saveUserData(data));
+      data = storedData[cacheKey];
+      if (data) {
+        dispatch(saveUserData(data));
+      }
     } catch (e) {
       //
     }
@@ -46,9 +52,9 @@ export function getStats(bias: number, user: IUserDetails) {
 
     const response = await tenBisApi.getUserData(user.id, bias);
 
-    if (!data || (data && data.orders.length < response.orders.length)) {
+    if (!data || (data && data.orders.length !== response.orders.length)) {
       dispatch(saveUserData(response));
-      await chromeService.mergeItem(RAW_DATA, { [bias]: response });
+      await chromeService.mergeItem(RAW_DATA, { [cacheKey]: response });
     }
   };
 }
