@@ -7,14 +7,18 @@ interface IMonthNavigationProps {
   onClickNext: () => void;
 }
 
-const currentMonth = new Date().getMonth();
+const firstDayOfMonth = new Date();
+firstDayOfMonth.setSeconds(0);
+firstDayOfMonth.setMinutes(0);
+firstDayOfMonth.setHours(0);
+firstDayOfMonth.setDate(0);
 
 export const MonthNavigation = ({
   currentDate,
   onClickNext,
   onClickPrev
 }: IMonthNavigationProps) => {
-  const isNextDisabled = currentDate.getMonth() >= currentMonth;
+  const isNextDisabled = currentDate.getTime() >= firstDayOfMonth.getTime();
   return (
     <nav className={styles.monthNavigation}>
       <button onClick={onClickPrev} className={styles.button}>
