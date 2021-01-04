@@ -36,9 +36,6 @@ const options = {
         options: {
           // disable type checker - we will use it in fork plugin
           transpileOnly: true,
-          compilerOptions: {
-            module: 'es2015',
-          },
         },
       },
       {
@@ -75,7 +72,7 @@ const options = {
     ],
   },
   resolve: {
-    alias: alias,
+    alias,
     extensions: ['.ts', '.tsx', '.js'],
   },
   plugins: [
@@ -92,7 +89,7 @@ const options = {
       patterns: [
         {
           from: 'src/manifest.json',
-          transform: function (content, path) {
+          transform: function (content) {
             // generates the manifest file using the package.json information
             return Buffer.from(
               JSON.stringify({
