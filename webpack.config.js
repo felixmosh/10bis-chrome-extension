@@ -76,7 +76,7 @@ const options = {
   },
   resolve: {
     alias: alias,
-    extensions: ['.ts', '.tsx', '.js']
+    extensions: ['.ts', '.tsx', '.js'],
   },
   plugins: [
     env.NODE_ENV === 'development' && new ForkTsCheckerWebpackPlugin(),
@@ -133,7 +133,7 @@ const options = {
 };
 
 if (env.NODE_ENV === 'development') {
-  options.devtool = 'eval-cheap-source-map';
+  options.devtool = 'eval-cheap-module-source-map';
 }
 
 module.exports = options;

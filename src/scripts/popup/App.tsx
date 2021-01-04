@@ -31,16 +31,15 @@ export class App extends Component<IAppProps, {}> {
     const { user } = this.props;
     if (user.isRestoreLoginInProgress) {
       return <div className={styles.textAlign}>טוען...</div>;
-    } else {
-      if (!user.isLoginInProgress && !!user.id) {
-        return <Stats />;
-      } else {
-        return (
-          <p className={styles.textAlign}>
-            אנא התחברו לאתר <a href="https://www.10bis.co.il">תן-ביס</a>
-          </p>
-        );
-      }
     }
+    if (!user.isLoginInProgress && !!user.id) {
+      return <Stats />;
+    }
+
+    return (
+      <p className={styles.textAlign}>
+        אנא התחברו לאתר <a href="https://www.10bis.co.il">תן-ביס</a>
+      </p>
+    );
   }
 }
