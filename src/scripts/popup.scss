@@ -47,7 +47,7 @@ body {
     right: -10px;
     height: 15px;
     opacity: .5;
-    background: linear-gradient(rgba($ten-bis-brand-line, 0.85), rgba($ten-bis-brand-line, 0.85));
+    background: rgba($ten-bis-brand-line, 0.85);
   }
   &:before {
     content: '';
@@ -57,6 +57,6 @@ body {
     right: -10px;
     height: 90px;
     opacity: .2;
-    background: url("/img/bg.jpg") no-repeat bottom center;
+    background: url("../img/bg.jpg") no-repeat bottom center;
   }
 }

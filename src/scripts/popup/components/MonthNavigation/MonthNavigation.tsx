@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import * as styles from './MonthNavigation.scss';
+import styles from './MonthNavigation.scss';
 
 interface IMonthNavigationProps {
   currentDate: Date;

@@ -1,7 +1,7 @@
 import { Component, h } from 'preact';
 import { connect } from 'preact-redux';
 import { IAppState, IReduxProps } from '../../types/types';
-import * as styles from './App.scss';
+import styles from './App.scss';
 import { Header } from './components/Header/Header';
 import { Stats } from './components/Stats/Stats';
 import { loadOptions } from './store/actions/options';

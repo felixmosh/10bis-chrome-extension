@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import { h } from 'preact';
-import * as s from './Header.scss';
+import s from './Header.scss';
 import user from '../../../../img/user.svg';
 
 export interface IHeaderProps {

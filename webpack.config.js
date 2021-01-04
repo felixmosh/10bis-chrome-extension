@@ -12,18 +12,7 @@ const webpack = require('webpack'),
 const alias = {};
 const secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');
 
-const fileExtensions = [
-  'jpg',
-  'jpeg',
-  'png',
-  'gif',
-  'eot',
-  'otf',
-  'svg',
-  'ttf',
-  'woff',
-  'woff2'
-];
+const fileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'svg'];
 
 if (fileSystem.existsSync(secretsPath)) {
   alias['secrets'] = secretsPath;
@@ -33,11 +22,11 @@ const options = {
   entry: {
     popup: path.join(__dirname, 'src', 'scripts', 'popup.entry.tsx'),
     options: path.join(__dirname, 'src', 'scripts', 'options.entry.tsx'),
-    background: path.join(__dirname, 'src', 'scripts', 'background.js')
+    background: path.join(__dirname, 'src', 'scripts', 'background.js'),
   },
   output: {
     path: path.join(__dirname, 'build'),
-    filename: 'scripts/[name].js'
+    filename: 'scripts/[name].js',
   },
   module: {
     rules: [
@@ -48,9 +37,9 @@ const options = {
           // disable type checker - we will use it in fork plugin
           transpileOnly: true,
           compilerOptions: {
-            module: 'es2015'
-          }
-        }
+            module: 'es2015',
+          },
+        },
       },
       {
         test: /\.scss$/,
@@ -61,95 +50,90 @@ const options = {
             options: {
               modules: {
                 mode: 'local',
-                localIdentName: '[local]-[hash:base64:5]'
+                localIdentName: '[local]-[hash:base64:5]',
               },
-            }
+            },
           },
-          'sass-loader'
+          'sass-loader',
         ],
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: new RegExp('.(' + fileExtensions.join('|') + ')$'),
         loader: 'file-loader',
         options: {
           name: '[name].[ext]',
-          outputPath: 'img/'
+          outputPath: 'img/',
         },
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /\.html$/,
         loader: 'html-loader',
-        exclude: /node_modules/
-      }
-    ]
+        exclude: /node_modules/,
+      },
+    ],
   },
   resolve: {
     alias: alias,
     extensions: ['.ts', '.tsx', '.js']
   },
   plugins: [
-    ...(env.NODE_ENV === 'development'
-      ? [
-          new ForkTsCheckerWebpackPlugin({
-            tslint: true
-          })
-        ]
-      : []),
+    env.NODE_ENV === 'development' && new ForkTsCheckerWebpackPlugin(),
     // clean the build folder
     new CleanWebpackPlugin({
       cleanStaleWebpackAssets: false,
-      cleanOnceBeforeBuildPatterns: ['build']
     }),
     // expose and write the allowed env vars on the compiled bundle
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV)
+      'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV),
     }),
-    new CopyWebpackPlugin([
-      {
-        from: 'src/manifest.json',
-        transform: function(content, path) {
-          // generates the manifest file using the package.json information
-          return Buffer.from(
-            JSON.stringify({
-              description: process.env.npm_package_description,
-              version: process.env.npm_package_version,
-              ...JSON.parse(content.toString())
-            })
-          );
-        }
-      },
-      {
-        from: 'src/img/',
-        to: 'img/'
-      },
-      {
-        from: 'src/fonts/',
-        to: 'fonts/'
-      }
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'src/manifest.json',
+          transform: function (content, path) {
+            // generates the manifest file using the package.json information
+            return Buffer.from(
+              JSON.stringify({
+                description: process.env.npm_package_description,
+                version: process.env.npm_package_version,
+                ...JSON.parse(content.toString()),
+              })
+            );
+          },
+        },
+        {
+          from: 'src/img/',
+          to: 'img/',
+        },
+        {
+          from: 'src/fonts/',
+          to: 'fonts/',
+        },
+      ],
+    }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src', 'popup.html'),
       filename: 'popup.html',
-      chunks: ['popup']
+      chunks: ['popup'],
     }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src', 'options.html'),
       filename: 'options.html',
-      chunks: ['options']
+      chunks: ['options'],
     }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src', 'background.html'),
       filename: 'background.html',
-      chunks: ['background']
+      chunks: ['background'],
     }),
-    new WriteFilePlugin()
-  ]
+    new WriteFilePlugin(),
+  ].filter(Boolean),
 };
 
 if (env.NODE_ENV === 'development') {
-  options.devtool = 'sourcemap';
+  options.devtool = 'eval-cheap-source-map';
 }
 
 module.exports = options;
