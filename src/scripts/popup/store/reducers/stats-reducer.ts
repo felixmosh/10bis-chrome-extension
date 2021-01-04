@@ -17,7 +17,7 @@ const initialState: IStatsState = {
   monthBias: 0,
   orders: [],
   coveredByCompany: 0,
-  totalExpense: 0
+  totalExpense: 0,
 };
 
 export function statsReducer(
@@ -25,19 +25,20 @@ export function statsReducer(
   action: IAction
 ) {
   switch (action.type) {
-    case StatsActions.SAVE_USER_DATA:
+    case StatsActions.SAVE_USER_DATA: {
       const orders: IOrder[] = action.value.orders.map((o) => ({
         ...o,
-        date: new Date(parseInt(o.date, 10))
+        date: new Date(parseInt(o.date, 10)),
       }));
 
       return {
         ...state,
         orders: calculateOrders(orders, state),
         totalExpense: calculateTotalExpense(action.value.orders),
-        coveredByCompany: action.value.monthlyLimit
+        coveredByCompany: action.value.monthlyLimit,
       };
-    case StatsActions.UPDATE_MONTH_BY:
+    }
+    case StatsActions.UPDATE_MONTH_BY: {
       const newDate = new Date(
         state.fromDate.getFullYear(),
         state.fromDate.getMonth() + action.value,
@@ -47,8 +48,9 @@ export function statsReducer(
         ...state,
         monthBias: state.monthBias + action.value,
         fromDate: getFirstDayOfMonth(newDate),
-        toDate: getLastDayOfMonth(newDate)
+        toDate: getLastDayOfMonth(newDate),
       };
+    }
     default:
       return state;
   }
@@ -95,7 +97,7 @@ function calculateOrders(orders: IOrder[], state: IStatsState) {
     accOrders[key] = {
       date: currentDate,
       orders: dayOrders,
-      total: dayOrders.reduce((total, { price }) => total + price, 0)
+      total: dayOrders.reduce((total, { price }) => total + price, 0),
     };
   }
 
@@ -105,6 +107,6 @@ function calculateOrders(orders: IOrder[], state: IStatsState) {
 export function formatPrice(price: number) {
   return price.toLocaleString('he-IL', {
     style: 'currency',
-    currency: 'ILS'
+    currency: 'ILS',
   });
 }
