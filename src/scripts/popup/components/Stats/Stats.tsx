@@ -10,7 +10,7 @@ interface IStatsProps extends IReduxProps, Partial<IAppState> {}
 
 @(connect((s: IAppState) => s) as any)
 export class Stats extends Component<IStatsProps> {
-  public componentWillMount() {
+  public componentDidMount() {
     const { user, dispatch } = this.props;
     dispatch(getStats(0, user as IUserDetails));
   }

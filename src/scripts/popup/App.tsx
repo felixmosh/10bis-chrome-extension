@@ -10,8 +10,8 @@ import { restoreLogin } from './store/actions/user';
 interface IAppProps extends IReduxProps, Partial<IAppState> {}
 
 @(connect((s: IAppState) => s) as any)
-export class App extends Component<IAppProps, {}> {
-  public componentWillMount() {
+export class App extends Component<IAppProps> {
+  public componentDidMount() {
     const { dispatch } = this.props;
     dispatch(loadOptions());
     dispatch(restoreLogin());
